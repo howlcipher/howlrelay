@@ -1,0 +1,71 @@
+# HowlRelay Architectural Decision Records (ADRs)
+
+This document tracks significant architectural decisions for HowlRelay using lightweight ADR entries.
+
+---
+
+## ADR-0001: Anti-Surveillance Core Principle and Prohibited Signals
+- **Date:** 2026-09-06
+- **Status:** Accepted
+- **Context:**
+  Distributed engineering tools frequently drift into monitoring employee presence, keystrokes, active windows, or online activity. This conflates visibility of the worker with observability of the work.
+- **Decision:**
+  HowlRelay adopts the foundational principle: **"Measure the work system, not the worker."**
+  HowlRelay explicitly prohibits and filters signals related to:
+  - Keystroke frequency / typing activity
+  - Mouse movement
+  - Webcams / screen captures / active application tracking
+  - Presence status (Slack, Teams, etc.)
+  - Idle time / away duration
+  - Badge swipes / physical office attendance
+  - Raw hours-online metrics
+  All domain models and adapters must strictly validate or sanitize input to reject these signals.
+- **Consequences:**
+  - Guarantees psychological safety and ethical alignment.
+  - Keeps HowlRelay focused purely on artifacts, verifiable outputs, decisions, dependencies, and state of work.
+
+---
+
+## ADR-0002: Python, Pydantic V2, and Local-First CLI Architecture
+- **Date:** 2026-09-06
+- **Status:** Accepted
+- **Context:**
+  HowlRelay needs to be fast, dependable, locally executable by both human developers and autonomous AI agents, and easily integrated with Howl ecosystem tools (HowlPlane, HowlChangeOps, HowlWriter).
+- **Decision:**
+  Use Python (>=3.10) with Pydantic v2 for strong typing and data validation, PyYAML for serialization, and a modular `src/howlrelay` layout.
+  External integrations (Git, CI, filesystems, HowlFrame) must reside behind adapter interfaces.
+  The core engine must run locally without requiring network access, cloud databases, or LLM runtime calls. AI enhances reasoning when available, but deterministic rules govern evidence collection and verification.
+- **Consequences:**
+  - Instant local execution in any repo with zero external server dependencies.
+  - High determinism and predictable machine-readable outputs (JSON, YAML, Markdown).
+
+---
+
+## ADR-0003: Evidence-Based Meeting-Required Reasoning States
+- **Date:** 2026-09-06
+- **Status:** Accepted
+- **Context:**
+  Engineering teams often schedule synchronous meetings by default due to a lack of observable work state. Conversely, an LLM hallucinating that "no meeting is needed" without evidence is dangerous.
+- **Decision:**
+  Introduce an evidence-based recommendation engine for synchronous alignment with 4 explicit states:
+  1. `NOT_REQUIRED`: All work is progressing, decisions are resolved, tests pass, next actions are clear.
+  2. `RECOMMENDED`: Non-trivial blocker or conflicting path detected where synchronous discussion could expedite resolution.
+  3. `REQUIRES_HUMAN_DECISION`: A high-impact architectural choice or policy boundary requires explicit human authority.
+  4. `INSUFFICIENT_EVIDENCE`: Insufficient state or evidence is available to determine if synchronous alignment is required.
+  Every recommendation must output inspectable triggers and rationale.
+- **Consequences:**
+  - Prevents unnecessary status meetings while clearly highlighting genuine decision bottlenecks.
+  - Maintains verifiable provenance for why a meeting was or was not recommended.
+
+---
+
+## ADR-0004: HowlFrame Capability & Loose Coupling Boundary
+- **Date:** 2026-09-06
+- **Status:** Accepted
+- **Context:**
+  HowlFrame provides capability-bounded policy evaluation in the Howl ecosystem. HowlRelay should leverage HowlFrame where available, but must not fail when running in environments where HowlFrame is not installed.
+- **Decision:**
+  Implement a dedicated `HowlFrameAdapter` with capability detection. If `howlframe` binary and policies are present, evaluate evidence envelopes through it; if absent, gracefully degrade to internal deterministic Python policy verification.
+- **Consequences:**
+  - Maintains ecosystem alignment with HowlFrame's "intent is not authority" model.
+  - Preserves standalone local utility across any developer workstation or standard CI runner.

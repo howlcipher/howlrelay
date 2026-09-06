@@ -50,6 +50,7 @@ Milestone 0 and Milestone 1 are complete:
 - `howlrelay status` -> verified Markdown, JSON, YAML outputs.
 - `howlrelay handoff --run-tests` -> verified end-to-end evidence collection and provenance.
 - `howlrelay brief` -> verified concise executive brief without activity theater.
+- GitHub Actions CI (run `34050072936`) -> all matrix builds green (Python 3.10, 3.11, 3.12, 3.13).
 
 ## Known Failures
 None.
@@ -58,12 +59,13 @@ None.
 None.
 
 ## Next Recommended Action
-1. Commit all files to `main` branch.
-2. Push commits to `origin/main` on GitHub.
-3. Monitor GitHub Actions CI run to verify multi-version Python matrix.
-4. Begin Milestone 2 / 3 tasks:
-   - Deep git diff-summary heuristics.
-   - HowlFrame native policy file (`.howl` / `.hfbc`) for handoff integrity gating.
+1. Begin Milestone 2 enhancements:
+   - Deep git diff-summary heuristics in `status` and `brief`.
+   - Blocker age tracking and dependency staleness detection.
+2. Advance Milestone 3:
+   - Implement native HowlFrame policy artifact (`.howl` / `.hfbc`) for handoff approval verification.
+3. Advance Milestone 4:
+   - GitHub PR and Issue adapter via `gh` CLI.
 
 ## Exact Starting Commands
 ```bash

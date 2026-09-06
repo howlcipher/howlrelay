@@ -76,6 +76,11 @@ Initialize the `howlcipher/howlrelay` repository, establish the core architectur
 - System python3 lacked pip package; virtual environment `python3 -m venv .venv` resolved it cleanly.
 
 ### Remaining Work
-- Push initial foundation to remote GitHub repository.
-- Track GitHub Actions CI execution.
-- Progress to Milestone 2 enhancements and Milestone 3 HowlFrame policy artifact.
+- Progress to Milestone 2 enhancements (deep diff heuristics, blocker staleness tracking).
+- Implement Milestone 3 HowlFrame policy artifact (.howl / .hfbc).
+- Explore Milestone 4 GitHub adapter.
+
+### Commits & CI Run
+- Commit: `2c23b7a` - `feat: initial release of HowlRelay with Evidence-Based Async Handoffs v1`
+- Remote Branch: `origin/main` (https://github.com/howlcipher/howlrelay)
+- GitHub Actions CI Run: `34050072936` (All matrix jobs passed: Python 3.10, 3.11, 3.12, 3.13)

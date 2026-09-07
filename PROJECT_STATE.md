@@ -44,7 +44,8 @@ Authoritative snapshot of project status, architecture, features, and immediate 
 - [x] GitHub Actions CI workflow for test matrix (3.10, 3.11, 3.12, 3.13) and flake8 linting.
 - [x] Heterogeneous continuity parser supporting numbered headings, heading synonyms, code-fence isolation, and subdirectories (ADR-0005).
 - [x] Creative dogfood artifacts collector and clean worktree key files fallback.
-- [x] Comprehensive test suite (24 unit and integration tests passing).
+- [x] Column-aligned git porcelain status parser with rename handling and whitespace preservation.
+- [x] Comprehensive test suite (25 unit and integration tests passing).
 - [x] Cross-dogfooding verification on sibling repository `howlcipher/howlcreate`.
 
 ---

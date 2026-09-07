@@ -124,3 +124,44 @@ def test_howlframe_collector():
     ev = collector.collect(repo_path)
     assert len(ev) == 1
     assert ev[0].type == EvidenceType.HOWLFRAME_POLICY
+
+
+def test_git_collector_porcelain_parsing(monkeypatch, tmp_path: Path):
+    collector = GitCollector()
+
+    # Mock _run_git to simulate porcelain output with leading spaces, renames, and staging
+    porcelain_output = (
+        " M src/modified_unstaged.py\n"
+        "M  src/staged_only.py\n"
+        "MM src/staged_and_modified.py\n"
+        "R  src/old_name.py -> src/renamed.py\n"
+        "?? untracked.txt\n"
+    )
+
+    def mock_run_git(repo_path, args):
+        if args == ["rev-parse", "--is-inside-work-tree"]:
+            return "true"
+        if args == ["status", "--porcelain"]:
+            return porcelain_output
+        return None
+
+    monkeypatch.setattr(collector, "_run_git", mock_run_git)
+
+    evidence = collector.collect(tmp_path)
+    status_ev = next(e for e in evidence if e.type == EvidenceType.GIT_STATUS)
+
+    assert status_ev.metadata["staged_count"] == 3
+    assert status_ev.metadata["staged_files"] == [
+        "src/staged_only.py",
+        "src/staged_and_modified.py",
+        "src/renamed.py",
+    ]
+    assert status_ev.metadata["modified_count"] == 2
+    assert status_ev.metadata["modified_files"] == [
+        "src/modified_unstaged.py",
+        "src/staged_and_modified.py",
+    ]
+    assert status_ev.metadata["untracked_count"] == 1
+    assert status_ev.metadata["untracked_files"] == ["untracked.txt"]
+    assert "src/modified_unstaged.py" in status_ev.metadata["all_uncommitted_files"]
+    assert "src/renamed.py" in status_ev.metadata["all_uncommitted_files"]

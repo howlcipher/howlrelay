@@ -21,7 +21,8 @@ Milestones 0, 1, GitHub Pages integration, and Cross-Repo Dogfooding Enhancement
 - Implemented canonical file audit checking standard subdirectories (`docs/journal`, `docs/adr`) before declaring files missing.
 - Added discovery of creative dogfood artifacts (`dogfood/*.json`, `dogfood/*.md`).
 - Added HEAD modified files and key files fallback when working tree is clean.
-- Added reproduction test `test_continuity_collector_heterogeneous_formats`.
+- Fixed porcelain status parser leading-whitespace stripping in `_run_git`, preserving column alignment, correct staging detection, and rename parsing.
+- Added reproduction and regression tests in `tests/test_adapters.py`.
 - Verified end-to-end `howlrelay status`, `howlrelay handoff`, and `howlrelay brief` against `howlcipher/howlcreate`.
 
 ## Important Decisions

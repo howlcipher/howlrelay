@@ -31,7 +31,7 @@ class GitCollector(BaseEvidenceCollector):
                 timeout=10,
             )
             if result.returncode == 0:
-                return result.stdout.strip()
+                return result.stdout.rstrip("\r\n")
             return None
         except Exception:
             return None
@@ -39,7 +39,7 @@ class GitCollector(BaseEvidenceCollector):
     def is_git_repo(self, repo_path: Path) -> bool:
         """Check whether repo_path is inside a git work tree."""
         out = self._run_git(repo_path, ["rev-parse", "--is-inside-work-tree"])
-        return out == "true"
+        return (out or "").strip() == "true"
 
     def collect(self, repo_path: Path) -> List[Evidence]:
         """Collect git evidence items from repo_path."""
@@ -114,18 +114,22 @@ class GitCollector(BaseEvidenceCollector):
         # 3. Working tree status (porcelain)
         status_raw = self._run_git(repo_path, ["status", "--porcelain"])
         if status_raw is not None:
-            lines = [line for line in status_raw.splitlines() if line.strip()]
+            lines = [line for line in status_raw.splitlines() if line]
             modified_files: List[str] = []
             untracked_files: List[str] = []
             staged_files: List[str] = []
 
             for line in lines:
+                if len(line) < 3:
+                    continue
                 status_code = line[:2]
                 filename = line[3:].strip()
+                if " -> " in filename:
+                    filename = filename.split(" -> ")[-1].strip()
                 if status_code.startswith("?") or status_code.endswith("?"):
                     untracked_files.append(filename)
                 else:
-                    if status_code[0] in ("M", "A", "D", "R"):
+                    if status_code[0] in ("M", "A", "D", "R", "C"):
                         staged_files.append(filename)
                     if status_code[1] in ("M", "D"):
                         modified_files.append(filename)

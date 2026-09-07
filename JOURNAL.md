@@ -140,4 +140,25 @@ Dogfood HowlRelay against sibling repository `howlcipher/howlcreate`. Identify a
   - `howlrelay handoff --repo /var/home/howlcipher/howlcreate` extracts all starting commands and 13 key files.
   - `howlrelay brief --repo /var/home/howlcipher/howlcreate` produces crisp, grounded executive summary.
 
+---
+
+## Session 4: 2026-09-06T21:43:00-04:00 (Porcelain Parsing & Whitespace Integrity)
+
+### Goal
+Resolve filename truncation and false-staging bug identified during live cross-repository inspection of `howlcipher/howlcreate`.
+
+### Problems Discovered
+1. **Porcelain Leading-Whitespace Truncation**: When running `howlrelay handoff --repo /var/home/howlcipher/howlcreate`, the first modified file appeared as `rc/howlcreate/engine/convergence.py` under staged files instead of `src/howlcreate/engine/convergence.py` under modified files.
+2. **Root Cause**: `GitCollector._run_git` called `.strip()` on command output. In `git status --porcelain`, an unstaged modification begins with a leading space (`" M filename"`). Stripping the entire output stripped that leading space, converting `" M src/..."` to `"M src/..."`. The parser then inspected index 0 (`"M"`), concluded the file was staged, and extracted the filename from index 3 (`"rc/..."`).
+
+### Work Completed
+1. Updated `GitCollector._run_git` to use `.rstrip("\r\n")` rather than `.strip()`, preserving column-aligned leading whitespace.
+2. Added defensive column index checks and rename handling (`"old -> new"` extraction) to `GitCollector.collect`.
+3. Added unit test `test_git_collector_porcelain_parsing` in `tests/test_adapters.py`.
+
+### Verification
+- `pytest -v` -> 25 passed in 0.71s.
+- `flake8 src tests` -> 0 errors/warnings.
+- Verified on `howlcreate`: files involved accurately reported as `src/howlcreate/...` with 0 staged, 3 unstaged.
+
 

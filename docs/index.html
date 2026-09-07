@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="HowlRelay is the persistent asynchronous work and agent continuity layer of the Howl ecosystem, providing durable journals, transferable state, and resumable execution across sessions and agent boundaries.">
+    <meta name="description" content="HowlRelay provides persistent asynchronous work coordination, durable trajectory journals, and resumable execution handoffs for AI agents in the Howl ecosystem.">
     <link rel="canonical" href="https://howlcipher.github.io/howlrelay/">
 
     <!-- Open Graph Metadata -->
@@ -23,6 +23,34 @@
     <meta name="twitter:description" content="Measure the work system, not the worker. Durable work journals, transferable state checkpoints, and resumable execution across sessions and agents.">
     <meta name="twitter:image" content="https://howlcipher.github.io/howlrelay/social-preview.png">
     <meta name="twitter:image:alt" content="HowlRelay persistent asynchronous work and agent continuity preview card">
+
+    <!-- Schema.org SoftwareApplication Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "HowlRelay",
+      "headline": "HowlRelay | Persistent Asynchronous Work & Agent Continuity",
+      "description": "HowlRelay is the persistent asynchronous work and agent continuity layer of the Howl ecosystem, providing durable journals, transferable state checkpoints, and resumable execution across sessions.",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Cross-platform",
+      "url": "https://howlcipher.github.io/howlrelay/",
+      "author": {
+        "@type": "Person",
+        "name": "William Elias",
+        "url": "https://howlcipher.github.io/william_elias/",
+        "sameAs": [
+          "https://github.com/howlcipher",
+          "https://www.linkedin.com/in/howlcipher/"
+        ]
+      },
+      "isPartOf": {
+        "@type": "SoftwareSourceCode",
+        "name": "Howl Ecosystem",
+        "url": "https://howlcipher.github.io/howl/"
+      }
+    }
+    </script>
 
     <title>HowlRelay | Persistent Asynchronous Work &amp; Agent Continuity</title>
     <link rel="stylesheet" href="style.css">
@@ -115,7 +143,7 @@
             </a>
         </div>
         <div class="drawer-footer">
-            <span>● 8 PRODUCTION &amp; CONTINUITY NODES</span>
+            <span>● 9 PRODUCTION &amp; CONTINUITY NODES</span>
             <span>AUTH // HOWL 2026</span>
         </div>
     </aside>
@@ -148,6 +176,7 @@
                 <a href="#capabilities">02_Capabilities</a>
                 <a href="#continuity">03_ContinuityModel</a>
                 <a href="#architecture">04_Architecture</a>
+                <a href="#continuity-qa">04B_Continuity_FAQ</a>
                 <a href="#privacy">05_AntiSurveillance</a>
                 <a href="#status-cli">06_StatusAndCLI</a>
             </nav>
@@ -166,7 +195,7 @@
                         <p class="hero-kicker">// persistent asynchronous work coordination / agent continuity layer</p>
                         <h1 id="main-title" class="hero-title">HowlRelay <span class="jp-sub">リレー // 2026</span></h1>
                         <p class="hero-lead">
-                            HowlRelay allows agents and workflows to continue engineering work across sessions, tools, and handoffs through durable journals, transferable state checkpoints, work queues, and resumable execution — without constant meetings or surveillance.
+                            HowlRelay allows agents and workflows to continue engineering work across sessions, tools, and handoffs through durable journals, transferable state checkpoints, work queues, and resumable execution — without constant meetings or surveillance. Engineered by <a href="https://howlcipher.github.io/william_elias/" style="color: var(--color-cyan); text-decoration: underline;">William Elias</a> as the continuity fabric of the <a href="https://howlcipher.github.io/howl/" style="color: var(--color-cyan); text-decoration: underline;">Howl Autonomous Software Engineering Ecosystem</a>.
                         </p>
                     </div>
 
@@ -380,6 +409,49 @@
                 </div>
             </section>
 
+            <!-- 04B Agent Continuity Q&A -->
+            <section id="continuity-qa" class="tech-panel">
+                <div class="tech-header">
+                    <h2><span class="sec-id">SECTION // 04B</span> Agent Continuity &amp; Asynchronous Coordination Q&amp;A</h2>
+                    <span class="subsystem-tag">HRLY-MOD-FAQ</span>
+                </div>
+                <div class="tech-body">
+                    <p class="section-intro">
+                        Multi-agent systems face hard context window limits and session fragmentation. HowlRelay replaces ad-hoc conversational summaries with structured, durable handoffs.
+                    </p>
+
+                    <div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <article class="tech-card" style="background: rgba(10, 14, 20, 0.6); border: 1px solid var(--border-color); padding: 1.25rem;">
+                            <h3 style="font-size: 1rem; color: var(--color-cyan); margin-bottom: 0.5rem;">How do AI coding agents hand off engineering work asynchronously across sessions?</h3>
+                            <p style="font-size: 0.875rem; line-height: 1.5; color: var(--text-muted);">
+                                Rather than re-reading thousands of raw conversation tokens, incoming agents ingest structured <code>HANDOFF.md</code> envelopes generated by HowlRelay. The handoff specifies the active task ID, git branch baseline, verified test assertions, unresolved blockers, and next deterministic steps, enabling zero-ramp continuation without context degradation.
+                            </p>
+                        </article>
+
+                        <article class="tech-card" style="background: rgba(10, 14, 20, 0.6); border: 1px solid var(--border-color); padding: 1.25rem;">
+                            <h3 style="font-size: 1rem; color: var(--color-magenta); margin-bottom: 0.5rem;">How does HowlRelay preserve context without token exhaustion?</h3>
+                            <p style="font-size: 0.875rem; line-height: 1.5; color: var(--text-muted);">
+                                HowlRelay records progress in append-only trajectory journals (<code>.journal.jsonl</code>) and projects them into concise state checkpoints. By distilling hundreds of tool execution steps into verified artifacts and explicit state diffs, downstream agents consume only high-signal ground truth within tight token budgets.
+                            </p>
+                        </article>
+
+                        <article class="tech-card" style="background: rgba(10, 14, 20, 0.6); border: 1px solid var(--border-color); padding: 1.25rem;">
+                            <h3 style="font-size: 1rem; color: var(--color-amber); margin-bottom: 0.5rem;">How does HowlRelay reject workplace surveillance while ensuring observability?</h3>
+                            <p style="font-size: 0.875rem; line-height: 1.5; color: var(--text-muted);">
+                                HowlRelay enforces strict anti-surveillance policies in its core logic: it tracks <em>work artifacts, verifiable test suites, and git changesets</em>, never keystrokes, camera presence, or activity timers. Team progress is measured by shipping functional code and passing automated verification, eliminating the need for status sync meetings.
+                            </p>
+                        </article>
+
+                        <article class="tech-card" style="background: rgba(10, 14, 20, 0.6); border: 1px solid var(--border-color); padding: 1.25rem;">
+                            <h3 style="font-size: 1rem; color: var(--color-green); margin-bottom: 0.5rem;">Who engineered HowlRelay and how does it integrate with the Howl ecosystem?</h3>
+                            <p style="font-size: 0.875rem; line-height: 1.5; color: var(--text-muted);">
+                                HowlRelay was engineered by <a href="https://howlcipher.github.io/william_elias/" style="color: var(--color-cyan); text-decoration: underline;">William Elias</a>. It serves as the asynchronous continuity substrate for <a href="https://howlcipher.github.io/howlplane/" style="color: var(--color-blue); text-decoration: underline;">HowlPlane</a> and release coordination in <a href="https://howlcipher.github.io/howlchangeops/" style="color: var(--color-red); text-decoration: underline;">HowlChangeOps</a>, guaranteeing that autonomous coding agents survive context compaction and session boundaries.
+                            </p>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
             <!-- 05 Anti-Surveillance Policy -->
             <section id="privacy" class="tech-panel">
                 <div class="tech-header">
@@ -507,10 +579,11 @@ flake8 src tests</code></pre>
                     <span class="status-dot" aria-hidden="true"></span>
                     <span>SYS_STATUS: ACTIVE // HOWLRELAY-PERSISTENCE-NODE</span>
                 </div>
-                <div>AUTH // HOWL 2026</div>
+                <div>AUTH // <a href="https://howlcipher.github.io/william_elias/" style="color: var(--text-muted); text-decoration: underline;">WILLIAM ELIAS</a> &bull; HOWL ECOSYSTEM 2026</div>
             </div>
             <div class="footer-links">
                 <nav class="footer-nav" aria-label="Ecosystem Links">
+                    <a href="https://howlcipher.github.io/william_elias/">William Elias</a>
                     <a href="https://howlcipher.github.io/howl/">Howl Hub</a>
                     <a href="https://howlcipher.github.io/howlcreate/">HowlCreate</a>
                     <a href="https://howlcipher.github.io/howlframe/">HowlFrame</a>

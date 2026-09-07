@@ -54,3 +54,6 @@ jobs:
 
       - name: Dogfood handoff generation on HowlRelay repository
         run: howlrelay handoff --format markdown
+
+      - name: Verify SEO Metadata & Artifacts
+        run: python3 scripts/test_seo.py

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+    <rect width="1200" height="630" fill="#14191C" />
+    <!-- Ambient glows -->
+    <circle cx="200" cy="150" r="400" fill="#102A43" opacity="0.6" />
+    <circle cx="1000" cy="500" r="400" fill="#087FAF" opacity="0.15" />
+    
+    <!-- Scanlines -->
+    <pattern id="scanlines" width="10" height="4" patternUnits="userSpaceOnUse">
+        <rect width="10" height="2" fill="rgba(255,255,255,0.03)" />
+    </pattern>
+    <rect width="1200" height="630" fill="url(#scanlines)" />
+
+    <!-- Border container -->
+    <rect x="50" y="50" width="1100" height="530" fill="none" stroke="#28B7D8" stroke-width="3" />
+    <rect x="56" y="56" width="1088" height="518" fill="none" stroke="#353B3D" stroke-width="1" />
+    
+    <!-- Header bar -->
+    <rect x="50" y="50" width="1100" height="40" fill="#102A43" />
+    <text x="75" y="76" font-family="'SF Mono', Menlo, Consolas, monospace" font-size="16" fill="#28B7D8" font-weight="bold">HOWL // RELAY // CONTINUITY &amp; PERSISTENCE LAYER</text>
+    <text x="1125" y="76" font-family="'SF Mono', Menlo, Consolas, monospace" font-size="14" fill="#E7E1CE" text-anchor="end">SYS_ID: HRLY-ASYNC-06</text>
+
+    <!-- Title -->
+    <text x="100" y="170" font-family="'SF Mono', Menlo, Consolas, monospace" font-size="52" font-weight="bold" fill="#E7E1CE">HOWLRELAY<tspan fill="#28B7D8">_</tspan></text>
+    <text x="100" y="215" font-family="'SF Mono', Menlo, Consolas, monospace" font-size="22" fill="#827C68">// persistent async work coordination &amp; agent continuity</text>
+
+    <!-- Flow diagram -->
+    <g transform="translate(100, 280)" font-family="'SF Mono', Menlo, Consolas, monospace" font-size="22" font-weight="bold">
+        <rect x="0" y="0" width="180" height="55" fill="#1B2226" stroke="#28B7D8" stroke-width="2" rx="4"/>
+        <text x="90" y="35" fill="#E7E1CE" text-anchor="middle">AGENT WORK</text>
+        
+        <text x="210" y="35" fill="#28B7D8" font-size="28">→</text>
+        
+        <rect x="250" y="0" width="180" height="55" fill="#1B2226" stroke="#28B7D8" stroke-width="2" rx="4"/>
+        <text x="340" y="35" fill="#E7E1CE" text-anchor="middle">JOURNAL</text>
+        
+        <text x="460" y="35" fill="#28B7D8" font-size="28">→</text>
+        
+        <rect x="500" y="0" width="180" height="55" fill="#1B2226" stroke="#28B7D8" stroke-width="2" rx="4"/>
+        <text x="590" y="35" fill="#E7E1CE" text-anchor="middle">CHECKPOINT</text>
+        
+        <text x="710" y="35" fill="#28B7D8" font-size="28">→</text>
+        
+        <rect x="750" y="0" width="180" height="55" fill="#1B2226" stroke="#087FAF" stroke-width="2" rx="4"/>
+        <text x="840" y="35" fill="#E7E1CE" text-anchor="middle">HANDOFF</text>
+    </g>
+
+    <!-- Core Principle Card -->
+    <rect x="100" y="380" width="1000" height="110" fill="#1B2226" stroke="#353B3D" stroke-width="1.5" rx="4" />
+    <text x="130" y="425" font-family="'SF Mono', Menlo, Consolas, monospace" font-size="20" font-weight="bold" fill="#28B7D8">AXIOM // MEASURE THE WORK SYSTEM, NOT THE WORKER.</text>
+    <text x="130" y="460" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="18" fill="#E7E1CE">Durable work journals, transferable state, and resumable execution across sessions and agents without surveillance.</text>
+
+    <!-- Footer -->
+    <text x="100" y="545" font-family="'SF Mono', Menlo, Consolas, monospace" font-size="16" fill="#827C68">HOWL ECOSYSTEM 2026 // OPEN SOURCE</text>
+    <circle cx="1030" cy="540" r="6" fill="#28B7D8" />
+    <text x="1125" y="545" font-family="'SF Mono', Menlo, Consolas, monospace" font-size="16" fill="#28B7D8" text-anchor="end">STATUS: ACTIVE</text>
+</svg>

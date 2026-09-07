@@ -4,14 +4,15 @@
 Build and launch HowlRelay: an async-first coordination and handoff system for distributed engineering teams. Deliver Milestone 0 (foundation, packaging, CI) and Milestone 1 (Evidence-Based Async Handoffs v1).
 
 ## Current State
-Milestone 0 and Milestone 1 are complete:
+Milestones 0, 1, and GitHub Pages ecosystem integration are complete:
 - GitHub repository created: `howlcipher/howlrelay`.
 - Full package structure implemented in `src/howlrelay`.
-- 21 unit and integration tests passing (`pytest`).
+- 23 unit, integration, and documentation tests passing (`pytest`).
 - Zero lint issues (`flake8 src tests`).
 - CLI commands implemented: `howlrelay status`, `howlrelay handoff`, `howlrelay brief`.
 - Self-dogfooding verified on `howlrelay` itself with epistemic provenance.
 - CI workflow established in `.github/workflows/ci.yml`.
+- Public GitHub Pages site deployed under `docs/` using Howl design tokens.
 
 ## Last Completed Work
 - Implemented `howlrelay.policy` anti-surveillance enforcement (ADR-0001).
@@ -20,7 +21,8 @@ Milestone 0 and Milestone 1 are complete:
 - Implemented `howlrelay.reasoning.meeting` 4-state engine (ADR-0003).
 - Implemented `howlrelay.renderers` (Markdown, JSON, YAML).
 - Implemented `howlrelay.cli.main` entrypoint with CLI options.
-- Verified live test execution integration via `howlrelay handoff --run-tests`.
+- Built public GitHub Pages portal in `docs/` with retro-futurist Howl design.
+- Added `tests/test_docs.py` automated documentation tests.
 
 ## Important Decisions
 - **Measure the work system, not the worker:** Strict prohibition on keystroke, mouse, camera, presence, or idle surveillance (ADR-0001).

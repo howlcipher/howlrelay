@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="HowlRelay is the persistent asynchronous work and agent continuity layer of the Howl ecosystem, providing durable journals, transferable state, and resumable execution across sessions and agent boundaries.">
+    <link rel="canonical" href="https://howlcipher.github.io/howlrelay/">
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="HowlRelay">
+    <meta property="og:title" content="HowlRelay | Persistent Asynchronous Work &amp; Agent Continuity">
+    <meta property="og:description" content="Measure the work system, not the worker. Durable work journals, transferable state checkpoints, and resumable execution across sessions and agents.">
+    <meta property="og:url" content="https://howlcipher.github.io/howlrelay/">
+    <meta property="og:image" content="https://howlcipher.github.io/howlrelay/social-preview.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="HowlRelay persistent asynchronous work and agent continuity preview card">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="HowlRelay | Persistent Asynchronous Work &amp; Agent Continuity">
+    <meta name="twitter:description" content="Measure the work system, not the worker. Durable work journals, transferable state checkpoints, and resumable execution across sessions and agents.">
+    <meta name="twitter:image" content="https://howlcipher.github.io/howlrelay/social-preview.png">
+    <meta name="twitter:image:alt" content="HowlRelay persistent asynchronous work and agent continuity preview card">
+
+    <title>HowlRelay | Persistent Asynchronous Work &amp; Agent Continuity</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" type="image/png" href="favicon.png">
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- Ecosystem Slide-out Drawer Overlay -->
+    <div id="eco-drawer-overlay" class="eco-drawer-overlay" aria-hidden="true"></div>
+
+    <!-- Ecosystem Slide-out Drawer Panel -->
+    <aside id="eco-drawer" class="eco-drawer" aria-label="Howl Ecosystem Directory" aria-hidden="true">
+        <div class="drawer-header">
+            <div class="drawer-title">HOWL // ECOSYSTEM DIRECTORY</div>
+            <button id="eco-drawer-close" class="btn-drawer-close" type="button" aria-label="Close ecosystem directory">[✕ CLOSE]</button>
+        </div>
+        <div class="drawer-body">
+            <a href="https://howlcipher.github.io/howl/" class="drawer-node-card">
+                <div class="node-card-top">
+                    <span class="node-card-name">HOWL // HUB</span>
+                    <span class="node-card-role">[PORTAL]</span>
+                </div>
+                <div class="node-card-desc">Central ecosystem portal, architectural blueprint, and cross-project governance map.</div>
+            </a>
+
+            <a href="https://howlcipher.github.io/howlcreate/" class="drawer-node-card">
+                <div class="node-card-top">
+                    <span class="node-card-name">HOWLCREATE</span>
+                    <span class="node-card-role" style="color: var(--color-amber);">[CREATIVE SEARCH]</span>
+                </div>
+                <div class="node-card-desc">Computational creativity, open-ended problem exploration, reframing, and concept lineage.</div>
+            </a>
+
+            <a href="https://howlcipher.github.io/howlframe/" class="drawer-node-card">
+                <div class="node-card-top">
+                    <span class="node-card-name">HOWLFRAME</span>
+                    <span class="node-card-role" style="color: var(--color-magenta);">[VM &amp; COMPILER]</span>
+                </div>
+                <div class="node-card-desc">AI-native reasoning language, typed intermediate representation, and sandboxed bytecode VM.</div>
+            </a>
+
+            <a href="https://howlcipher.github.io/howlplane/" class="drawer-node-card">
+                <div class="node-card-top">
+                    <span class="node-card-name">HOWLPLANE</span>
+                    <span class="node-card-role" style="color: var(--color-blue);">[CONTROL PLANE]</span>
+                </div>
+                <div class="node-card-desc">Engineering control plane with deterministic routing, adversarial falsification, and human gates.</div>
+            </a>
+
+            <a href="https://howlcipher.github.io/howlchangeops/" class="drawer-node-card">
+                <div class="node-card-top">
+                    <span class="node-card-name">HOWLCHANGEOPS</span>
+                    <span class="node-card-role" style="color: var(--color-red);">[AUTHORITY GATE]</span>
+                </div>
+                <div class="node-card-desc">Governed release controller enforcing cryptographic human approvals and bounded Git mutations.</div>
+            </a>
+
+            <a href="https://howlcipher.github.io/howlrelay/" class="drawer-node-card active-hub">
+                <div class="node-card-top">
+                    <span class="node-card-name">HOWLRELAY</span>
+                    <span class="node-card-role" style="color: var(--color-cyan);">[CONTINUITY]</span>
+                </div>
+                <div class="node-card-desc">Persistent asynchronous work coordination, durable journals, and resumable execution handoffs.</div>
+            </a>
+
+            <a href="https://howlcipher.github.io/howlnotes/" class="drawer-node-card">
+                <div class="node-card-top">
+                    <span class="node-card-name">HOWLNOTES</span>
+                    <span class="node-card-role" style="color: var(--color-cyan);">[KNOWLEDGE NOTEBOOK]</span>
+                </div>
+                <div class="node-card-desc">Engineering knowledge notebook &amp; full-stack dogfood consumer proving native persistent storage.</div>
+            </a>
+
+            <a href="https://howlcipher.github.io/howlboard/" class="drawer-node-card">
+                <div class="node-card-top">
+                    <span class="node-card-name">HOWLBOARD</span>
+                    <span class="node-card-role" style="color: var(--color-amber);">[EVALUATION SURFACE]</span>
+                </div>
+                <div class="node-card-desc">Observation console and full-stack deterministic task state machine application.</div>
+            </a>
+
+            <a href="https://howlcipher.github.io/howlwriter/" class="drawer-node-card">
+                <div class="node-card-top">
+                    <span class="node-card-name">HOWLWRITER</span>
+                    <span class="node-card-role" style="color: var(--color-magenta);">[WRITING CONTROL]</span>
+                </div>
+                <div class="node-card-desc">Writing control system for voice preservation, deterministic style linting, humanization, and review.</div>
+            </a>
+        </div>
+        <div class="drawer-footer">
+            <span>● 8 PRODUCTION &amp; CONTINUITY NODES</span>
+            <span>AUTH // HOWL 2026</span>
+        </div>
+    </aside>
+
+    <div class="layout-container">
+        <!-- Site Header -->
+        <header class="site-header">
+            <div class="header-top">
+                <div class="header-brand">
+                    <a href="https://howlcipher.github.io/howlrelay/" class="brand-sig">HOWL <span>//</span> RELAY</a>
+                    <span class="subsystem-tag">SYS_ID: HRLY-ASYNC-06</span>
+                </div>
+                <div class="header-actions">
+                    <button id="eco-menu-toggle" class="btn-eco-toggle" type="button" aria-expanded="false" aria-controls="eco-drawer" aria-label="Toggle Howl Ecosystem Directory">
+                        <span aria-hidden="true">☰</span> [ECOSYSTEM]
+                    </button>
+                    <button id="theme-toggle" class="btn-theme-toggle" type="button" aria-pressed="false">
+                        <span aria-hidden="true">☾</span> [DARK_MODE]
+                    </button>
+                    <a href="https://github.com/howlcipher/howlrelay" class="btn-tech btn-tech-primary" target="_blank" rel="noreferrer">
+                        [ GITHUB REPO ]
+                    </a>
+                </div>
+            </div>
+
+            <!-- In-Page Section Navigation -->
+            <nav class="section-nav" aria-label="Page sections">
+                <span class="section-nav-label">READ_PATH:</span>
+                <a href="#problem">01_Problem</a>
+                <a href="#capabilities">02_Capabilities</a>
+                <a href="#continuity">03_ContinuityModel</a>
+                <a href="#architecture">04_Architecture</a>
+                <a href="#privacy">05_AntiSurveillance</a>
+                <a href="#status-cli">06_StatusAndCLI</a>
+            </nav>
+        </header>
+
+        <!-- Main Content Surface -->
+        <main id="main-content">
+            <!-- Hero Panel -->
+            <section class="hero-panel" aria-labelledby="main-title">
+                <div class="hero-banner">
+                    <span>SPEC_VER // 2026.1 (RETRO-FUTURIST INDUSTRIAL SPEC)</span>
+                    <span>ARCHITECTURE: ASYNC-FIRST COORDINATION &amp; PERSISTENT AGENT STATE</span>
+                </div>
+                <div class="hero-body">
+                    <div class="hero-header-block">
+                        <p class="hero-kicker">// persistent asynchronous work coordination / agent continuity layer</p>
+                        <h1 id="main-title" class="hero-title">HowlRelay <span class="jp-sub">リレー // 2026</span></h1>
+                        <p class="hero-lead">
+                            HowlRelay allows agents and workflows to continue engineering work across sessions, tools, and handoffs through durable journals, transferable state checkpoints, work queues, and resumable execution — without constant meetings or surveillance.
+                        </p>
+                    </div>
+
+                    <div class="axiom-card" role="region" aria-label="Governing Principle">
+                        <strong>AXIOM // MEASURE THE WORK SYSTEM, NOT THE WORKER.</strong> Remote and distributed engineering must be evaluated by whether work is observable, transferable, verifiable, and capable of continuing asynchronously — not by whether workers or agent processes are physically visible.
+                    </div>
+
+                    <div class="hero-actions">
+                        <a href="#capabilities" class="btn-tech btn-tech-primary">
+                            [ EXPLORE CAPABILITIES ]
+                        </a>
+                        <a href="#architecture" class="btn-tech">
+                            [ CONTINUITY ARCHITECTURE ]
+                        </a>
+                        <a href="https://github.com/howlcipher/howlrelay" class="btn-tech" target="_blank" rel="noreferrer">
+                            [ VIEW ON GITHUB ]
+                        </a>
+                    </div>
+
+                    <!-- Hero Interoperability Diagram -->
+                    <div class="hero-diagram-wrap" aria-label="HowlRelay Continuity Topology">
+                        <div class="diagram-header">
+                            <span>WORKFLOW // DURABLE BATON-PASSING &amp; RESUMABLE CONTINUATION</span>
+                            <span>STATUS: 21/21 TESTS PASSING (0 LINT WARNINGS)</span>
+                        </div>
+                        <div class="code-container" style="border: none; margin: 0;">
+                            <pre><code>┌─────────────┐       ┌─────────────┐       ┌─────────────┐       ┌─────────────┐       ┌─────────────┐
+│    AGENT    │──────►│  EXECUTE    │──────►│   JOURNAL   │──────►│ CHECKPOINT  │──────►│   HANDOFF   │
+│ (Any Model) │       │  &amp; TEST     │       │ (Append Log)│       │(Work State) │       │  (Baton)    │
+└─────────────┘       └─────────────┘       └─────────────┘       └─────────────┘       └──────┬──────┘
+                                                                                               │
+                                            ┌──────────────────────────────────────────────────┘
+                                            ▼
+                                    ┌─────────────┐       ┌─────────────┐
+                                    │ NEXT AGENT  │──────►│   RESUME    │
+                                    │ / SESSION   │       │ IMMEDIATELY │
+                                    └─────────────┘       └─────────────┘</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 01 Problem Statement -->
+            <section id="problem" class="tech-panel">
+                <div class="tech-header">
+                    <h2><span class="sec-id">SECTION // 01</span> The Problem: Meeting Saturation &amp; Surveillance Creep</h2>
+                    <span class="subsystem-tag">HRLY-MOD-PROBLEM</span>
+                </div>
+                <div class="tech-body">
+                    <p>
+                        Modern distributed engineering teams and multi-agent workflows suffer from two symmetrical failure modes:
+                    </p>
+                    <div class="grid-2col">
+                        <div class="dir-card" style="border-top: 3px solid var(--color-red);">
+                            <div class="dir-card-header">
+                                <span class="dir-card-title">01 // Synchronous Meeting Saturation</span>
+                                <span class="chip chip-red">COLLAPSE OF FLOW</span>
+                            </div>
+                            <p class="dir-card-desc">
+                                When state is fragmented across local branches, uncommitted git diffs, ephemeral chat messages, and transient agent contexts, teams schedule endless status meetings just to answer: <em>"Where are we, what is blocked, and who owns what next?"</em> Every context switch drains engineering momentum.
+                            </p>
+                        </div>
+                        <div class="dir-card" style="border-top: 3px solid var(--color-amber);">
+                            <div class="dir-card-header">
+                                <span class="dir-card-title">02 // Surveillance Creep &amp; Activity Theater</span>
+                                <span class="chip chip-amber">DESTRUCTION OF TRUST</span>
+                            </div>
+                            <p class="dir-card-desc">
+                                In response to remote visibility challenges, management platforms increasingly track keystrokes, active window titles, mouse movement, webcam captures, and Slack presence dots. This catastrophically confuses <strong>visibility of the worker</strong> with <strong>observability of the work</strong>.
+                            </p>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1.5rem;">
+                        Engineering workflows do not require surveillance or meetings. They require <strong>explicit, verifiable, and transferable work state</strong> backed by real artifacts: commits, diffs, test runs, and documented decisions.
+                    </p>
+                </div>
+            </section>
+
+            <!-- 02 Capabilities -->
+            <section id="capabilities" class="tech-panel">
+                <div class="tech-header">
+                    <h2><span class="sec-id">SECTION // 02</span> What HowlRelay Does: Asynchronous Continuity</h2>
+                    <span class="subsystem-tag">HRLY-MOD-CAPABILITIES</span>
+                </div>
+                <div class="tech-body">
+                    <p>HowlRelay provides deterministic tools to collect, evaluate, and transfer engineering progress:</p>
+                    <div class="grid-2col">
+                        <div>
+                            <h3>01 // Transferable WorkState Domain Model</h3>
+                            <p>
+                                Captures a comprehensive, typed snapshot of current work: git branch, HEAD commit, uncommitted working tree diff summary, test execution evidence, blockers, and concrete next actions. Missing information is explicitly tagged as <code>Unknown</code> rather than hallucinated.
+                            </p>
+                        </div>
+                        <div>
+                            <h3>02 // Evidence-Grounded Meeting Reasoning</h3>
+                            <p>
+                                Rather than relying on heuristic hunches, HowlRelay's <code>MeetingReasoningEngine</code> evaluates test failures, unresolved architectural decisions, and blocker criticality to determine whether a synchronous discussion is genuinely required or if work can proceed asynchronously.
+                            </p>
+                        </div>
+                        <div>
+                            <h3>03 // Resumable Multi-Agent Sessions</h3>
+                            <p>
+                                Long-running engineering initiatives exceed single agent context windows and human shifts. HowlRelay checkpoints state so any agent or engineer can pick up the baton, inspect the exact prior evidence, and resume without asking for a verbal briefing.
+                            </p>
+                        </div>
+                        <div>
+                            <h3>04 // Structured Multi-Format Export</h3>
+                            <p>
+                                Emits clean, deterministic Markdown handoff documents (ready for <code>HANDOFF.md</code>), machine-readable JSON for orchestration pipelines, and typed YAML for cross-system integration.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 03 Continuity Model -->
+            <section id="continuity" class="tech-panel">
+                <div class="tech-header">
+                    <h2><span class="sec-id">SECTION // 03</span> The Journaling &amp; Handoff Protocol</h2>
+                    <span class="subsystem-tag">HRLY-MOD-CONTINUITY</span>
+                </div>
+                <div class="tech-body">
+                    <p>
+                        HowlRelay formalizes the discipline of <strong>baton-passing continuity</strong>. Every engineering session writes to durable artifacts that live directly alongside code in the repository:
+                    </p>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Artifact</th>
+                                    <th>Lifecycle Role</th>
+                                    <th>Authority &amp; Mutability</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>JOURNAL.md</code></td>
+                                    <td>Durable chronological work log recording actions taken, problems encountered, and environmental findings.</td>
+                                    <td>Append-only history. Never rewritten or erased.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>HANDOFF.md</code></td>
+                                    <td>The baton-passing artifact. Explicitly declares the exact next command, active branch, blockers, and verification state for the next session.</td>
+                                    <td>Overwritten at session conclusion with the freshest verifiable state.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>PROJECT_STATE.md</code></td>
+                                    <td>Authoritative snapshot of architecture, completed milestones, active integrations, and known technical debt.</td>
+                                    <td>Updated as structural milestones converge.</td>
+                                </tr>
+                                <tr>
+                                    <td><code>DECISIONS.md</code></td>
+                                    <td>Architecture Decision Records (ADRs) capturing rationale, rejected alternatives, and trade-offs.</td>
+                                    <td>Immutable historical record of deliberate engineering choices.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 04 Architecture & Ecosystem Integration -->
+            <section id="architecture" class="tech-panel">
+                <div class="tech-header">
+                    <h2><span class="sec-id">SECTION // 04</span> Ecosystem Architecture: HowlPlane vs HowlRelay</h2>
+                    <span class="subsystem-tag">HRLY-MOD-ARCHITECTURE</span>
+                </div>
+                <div class="tech-body">
+                    <div class="axiom-card" style="border-left-color: var(--color-blue);">
+                        <strong>DIVISION OF RESPONSIBILITY:</strong><br>
+                        • <strong>HowlPlane</strong> decides and orchestrates <em>what work should happen</em> (task decomposition, agent routing, evidence ledgers).<br>
+                        • <strong>HowlRelay</strong> ensures that work <em>survives across time, sessions, tools, and agent boundaries</em> (checkpoints, state serialization, handoffs).
+                    </div>
+
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">[SCHEMATIC // HOWLPLANE_AND_HOWLRELAY_INTEGRATION]</span>
+                            <span class="subsystem-tag">INTEROP_GRAPH</span>
+                        </div>
+                        <pre><code>                              ┌─────────────────────────┐
+                              │  HOWLPLANE ORCHESTRATOR │
+                              │ Task Dispatch &amp; Routing │
+                              └────────────┬────────────┘
+                                           │
+                                  Dispatches Work Unit
+                                           │
+                                           ▼
+┌─────────────────────────┐   ┌─────────────────────────┐   ┌─────────────────────────┐
+│     HOWLFRAME (VM)      │   │    HOWLRELAY ENGINE     │   │   HOWLCHANGEOPS (GATE)  │
+│ Optional Policy Checks  │◄──┤  Persistence &amp; Handoff  ├──►│  HMAC Human Sign-off    │
+│ Capability Enforcement  │   │  Evidence Collectors    │   │  Bounded Git Mutations  │
+└─────────────────────────┘   └────────────┬────────────┘   └─────────────────────────┘
+                                           │
+                              Saves Checkpoint &amp; Journal
+                                           │
+                                           ▼
+                              ┌─────────────────────────┐
+                              │  RESUMABLE AGENT POOL   │
+                              │ (Local CLI / Subagents) │
+                              └─────────────────────────┘</code></pre>
+                    </div>
+
+                    <h3 style="margin-top: 1.5rem;">Provider &amp; Toolchain Integrations</h3>
+                    <ul>
+                        <li><strong>Git Adapter (<code>howlrelay.adapters.git</code>):</strong> Native subprocess inspection of commits, working diffs, branches, and remote sync state.</li>
+                        <li><strong>Continuity Adapter (<code>howlrelay.adapters.continuity</code>):</strong> Structured markdown extraction of ADRs, objectives, blockers, and next actions.</li>
+                        <li><strong>Test Runner Adapter (<code>howlrelay.adapters.test_runner</code>):</strong> Pytest cache inspection and live execution with exit code isolation.</li>
+                        <li><strong>HowlFrame Adapter (<code>howlrelay.adapters.howlframe</code>):</strong> Local toolchain discovery and optional policy-checking integration, falling back cleanly when offline.</li>
+                        <li><strong>Local AI / Ollama Ready:</strong> Operates entirely local-first. Analysis and handoff compilation require zero external network calls or cloud telemetry.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 05 Anti-Surveillance Policy -->
+            <section id="privacy" class="tech-panel">
+                <div class="tech-header">
+                    <h2><span class="sec-id">SECTION // 05</span> Strict Anti-Surveillance Standard</h2>
+                    <span class="subsystem-tag">HRLY-MOD-PRIVACY</span>
+                </div>
+                <div class="tech-body">
+                    <p>
+                        HowlRelay enforces an uncompromising technical boundary between work observability and human surveillance. Ingestion adapters actively sanitize and reject surveillance signals:
+                    </p>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Signal Category</th>
+                                    <th>HowlRelay Policy</th>
+                                    <th>Technical Enforcement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Keystroke / Typing Cadence Tracking</td>
+                                    <td style="color: var(--color-red); font-weight: bold;">[STRICTLY PROHIBITED]</td>
+                                    <td>Rejected by policy sanitizer. Never ingested or stored.</td>
+                                </tr>
+                                <tr>
+                                    <td>Mouse Movement / Active Cursor Jiggling</td>
+                                    <td style="color: var(--color-red); font-weight: bold;">[STRICTLY PROHIBITED]</td>
+                                    <td>Rejected by policy sanitizer. Not tracked.</td>
+                                </tr>
+                                <tr>
+                                    <td>Webcam / Microphone / Desktop Screenshots</td>
+                                    <td style="color: var(--color-red); font-weight: bold;">[STRICTLY PROHIBITED]</td>
+                                    <td>Zero capture hooks. Explicitly blocked in models.</td>
+                                </tr>
+                                <tr>
+                                    <td>Chat Presence Dots / Idle Time Tracking</td>
+                                    <td style="color: var(--color-red); font-weight: bold;">[STRICTLY PROHIBITED]</td>
+                                    <td>Ignored. Presence is not work evidence.</td>
+                                </tr>
+                                <tr>
+                                    <td>Verifiable Git Diffs &amp; Commits</td>
+                                    <td style="color: var(--color-cyan); font-weight: bold;">[FIRST-CLASS EVIDENCE]</td>
+                                    <td>Inspected via read-only local Git adapter.</td>
+                                </tr>
+                                <tr>
+                                    <td>Automated Test Suite Pass / Fail Evidence</td>
+                                    <td style="color: var(--color-cyan); font-weight: bold;">[FIRST-CLASS EVIDENCE]</td>
+                                    <td>Inspected via Pytest exit codes and test reports.</td>
+                                </tr>
+                                <tr>
+                                    <td>Documented Architecture Decisions &amp; Blockers</td>
+                                    <td style="color: var(--color-cyan); font-weight: bold;">[FIRST-CLASS EVIDENCE]</td>
+                                    <td>Parsed from canonical markdown continuity files.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 06 Status & CLI -->
+            <section id="status-cli" class="tech-panel">
+                <div class="tech-header">
+                    <h2><span class="sec-id">SECTION // 06</span> Current Project Status &amp; CLI Usage</h2>
+                    <span class="subsystem-tag">HRLY-MOD-CLI</span>
+                </div>
+                <div class="tech-body">
+                    <div class="grid-2col" style="margin-bottom: 1.5rem;">
+                        <div>
+                            <h3>Project Maturity</h3>
+                            <p>
+                                <strong>Status:</strong> Pre-Alpha / Experimental (Milestones 0 &amp; 1 complete).<br>
+                                <strong>Verification:</strong> 21 automated unit and integration tests passing cleanly; 0 flake8 lint warnings.<br>
+                                <strong>Self-Dogfooding:</strong> HowlRelay generates handoffs for its own repository, passing the baton between engineering sessions.
+                            </p>
+                        </div>
+                        <div>
+                            <h3>Upcoming Milestones</h3>
+                            <p>
+                                • Deep diff-summary analysis in project brief output.<br>
+                                • Blocker age tracking and dependency staleness warnings.<br>
+                                • Native HowlFrame <code>.howl</code> policy verification rules.<br>
+                                • GitHub PR / Issue evidence collectors via <code>gh</code> CLI.
+                            </p>
+                        </div>
+                    </div>
+
+                    <h3>Command Line Interface</h3>
+                    <div class="code-container">
+                        <div class="code-header">
+                            <span class="code-title">[BASH // HOWLRELAY_CLI_COMMANDS]</span>
+                            <button class="btn-copy" type="button">[COPY]</button>
+                        </div>
+                        <pre><code># Install HowlRelay in an isolated virtual environment:
+git clone https://github.com/howlcipher/howlrelay.git
+cd howlrelay
+python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+pip install -e ".[dev]"
+
+# 1. Inspect the current state of a workstream:
+howlrelay status
+
+# 2. Generate an authoritative handoff for the next session/agent:
+howlrelay handoff
+howlrelay handoff --format markdown
+howlrelay handoff --update-handoff  # Writes directly to HANDOFF.md
+howlrelay handoff --run-tests       # Executes test suite for fresh evidence
+
+# 3. Generate a concise team status brief (without scheduling meetings):
+howlrelay brief
+
+# Run test suite &amp; verify anti-surveillance policies:
+pytest -v
+flake8 src tests</code></pre>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Site Footer -->
+        <footer class="site-footer">
+            <div class="footer-telemetry">
+                <div class="status-indicator">
+                    <span class="status-dot" aria-hidden="true"></span>
+                    <span>SYS_STATUS: ACTIVE // HOWLRELAY-PERSISTENCE-NODE</span>
+                </div>
+                <div>AUTH // HOWL 2026</div>
+            </div>
+            <div class="footer-links">
+                <nav class="footer-nav" aria-label="Ecosystem Links">
+                    <a href="https://howlcipher.github.io/howl/">Howl Hub</a>
+                    <a href="https://howlcipher.github.io/howlcreate/">HowlCreate</a>
+                    <a href="https://howlcipher.github.io/howlframe/">HowlFrame</a>
+                    <a href="https://howlcipher.github.io/howlplane/">HowlPlane</a>
+                    <a href="https://howlcipher.github.io/howlchangeops/">HowlChangeOps</a>
+                    <a href="https://howlcipher.github.io/howlrelay/">HowlRelay</a>
+                    <a href="https://howlcipher.github.io/howlnotes/">HowlNotes</a>
+                    <a href="https://howlcipher.github.io/howlboard/">HowlBoard</a>
+                    <a href="https://howlcipher.github.io/howlwriter/">HowlWriter</a>
+                </nav>
+                <a href="#main-content">[ BACK TO TOP ]</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

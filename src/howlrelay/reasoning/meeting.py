@@ -85,20 +85,30 @@ class MeetingReasoningEngine:
                 triggers=triggers,
             )
 
-        # 3. Check for critical or high-severity blockers
+        # 3. Check for critical, high-severity, or stale blockers
+        stale_blockers = [b for b in blockers if b.stale]
         critical_blockers = [
             b for b in blockers
             if b.severity.upper() in ("CRITICAL", "HIGH")
         ]
-        if critical_blockers:
-            triggers.append(f"critical_blockers({len(critical_blockers)})")
-            blocker_summaries = "; ".join(b.description for b in critical_blockers[:2])
+        if stale_blockers or critical_blockers:
+            reasons: List[str] = []
+            if stale_blockers:
+                triggers.append(f"stale_blockers({len(stale_blockers)})")
+                first = stale_blockers[0]
+                commits_info = f" ({first.age_commits} commits old)" if first.age_commits else ""
+                reasons.append(f"Workstream blocker '{first.description}' is stale{commits_info}")
+            if critical_blockers:
+                triggers.append(f"critical_blockers({len(critical_blockers)})")
+                blocker_summaries = "; ".join(b.description for b in critical_blockers[:2])
+                reasons.append(
+                    f"Workstream has {len(critical_blockers)} high-priority "
+                    f"blocker(s): '{blocker_summaries}'"
+                )
+
             return MeetingRecommendation(
                 recommendation=MeetingRecommendationState.RECOMMENDED,
-                reason=(
-                    f"Workstream has {len(critical_blockers)} high-priority blocker(s): "
-                    f"'{blocker_summaries}'. Synchronous collaboration may expedite unblocking."
-                ),
+                reason=f"{'. '.join(reasons)}. Synchronous collaboration may expedite unblocking.",
                 triggers=triggers,
             )
 

@@ -86,6 +86,8 @@ class Blocker(BaseModel):
     reason: str
     dependency_ref: Optional[str] = None
     severity: str = "MEDIUM"  # LOW, MEDIUM, HIGH, CRITICAL
+    age_commits: Optional[int] = None
+    stale: bool = False
 
 
 class Dependency(BaseModel):

@@ -7,7 +7,7 @@ staged/unstaged diffs, remotes, and modified files.
 import hashlib
 import subprocess
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from howlrelay.adapters.base import BaseEvidenceCollector
 from howlrelay.model import Evidence, EvidenceType
@@ -161,12 +161,13 @@ class GitCollector(BaseEvidenceCollector):
                 )
             )
 
-        # 4. Working tree diff stat
+        # 4. Working tree diff stat & deep architectural analysis
         diff_stat = self._run_git(repo_path, ["diff", "--stat"])
         cached_stat = self._run_git(repo_path, ["diff", "--cached", "--stat"])
         diff_parts = [part for part in (diff_stat, cached_stat) if part]
         total_diff = "\n".join(diff_parts)
         if total_diff.strip():
+            deep_diff = self.analyze_diff(repo_path)
             diff_digest = hashlib.sha256(total_diff.encode("utf-8")).hexdigest()
             evidence_list.append(
                 Evidence(
@@ -175,7 +176,14 @@ class GitCollector(BaseEvidenceCollector):
                     source="git",
                     description=f"Active diff summary:\n{total_diff.strip()}",
                     fingerprint=diff_digest,
-                    metadata={"has_uncommitted_diffs": True},
+                    metadata={
+                        "has_uncommitted_diffs": True,
+                        "layers": deep_diff["layers"],
+                        "modified_symbols": deep_diff["modified_symbols"],
+                        "test_parity_risk": deep_diff["test_parity_risk"],
+                        "core_files_count": deep_diff["core_files_count"],
+                        "test_files_count": deep_diff["test_files_count"],
+                    },
                 )
             )
 
@@ -219,3 +227,99 @@ class GitCollector(BaseEvidenceCollector):
             )
 
         return evidence_list
+
+    def analyze_diff(self, repo_path: Path) -> Dict[str, Any]:
+        """Perform deep architectural diff analysis and test parity evaluation."""
+        raw_diff = self._run_git(repo_path, ["diff", "-U0"]) or ""
+        raw_cached = self._run_git(repo_path, ["diff", "--cached", "-U0"]) or ""
+        combined_diff = f"{raw_diff}\n{raw_cached}".strip()
+
+        layers: Dict[str, List[str]] = {
+            "core": [],
+            "tests": [],
+            "docs": [],
+            "config": [],
+            "other": [],
+        }
+
+        modified_symbols: List[str] = []
+
+        for line in combined_diff.splitlines():
+            if line.startswith("diff --git "):
+                parts = line.split()
+                if len(parts) >= 4:
+                    b_path = parts[3]
+                    current_file = b_path[2:] if b_path.startswith("b/") else b_path
+
+                    if current_file.startswith("src/") or "/src/" in current_file:
+                        layers["core"].append(current_file)
+                    elif (
+                        current_file.startswith("tests/")
+                        or "/tests/" in current_file
+                        or "test_" in current_file
+                    ):
+                        layers["tests"].append(current_file)
+                    elif current_file.startswith("docs/") or current_file.endswith(".md"):
+                        layers["docs"].append(current_file)
+                    elif (
+                        current_file in ("pyproject.toml", "setup.py", "Cargo.toml", "package.json")
+                        or current_file.startswith(".github/")
+                    ):
+                        layers["config"].append(current_file)
+                    else:
+                        layers["other"].append(current_file)
+
+            elif line.startswith("@@ ") and "@@" in line[3:]:
+                after_second_at = line.split("@@", 2)[-1].strip()
+                if after_second_at:
+                    symbol = after_second_at
+                    if (
+                        symbol.startswith("def ")
+                        or symbol.startswith("class ")
+                        or symbol.startswith("async def ")
+                    ):
+                        sym_name = symbol.split("(")[0].split(":")[0].strip()
+                        modified_symbols.append(sym_name)
+                    else:
+                        modified_symbols.append(symbol[:40])
+
+        for k in layers:
+            layers[k] = list(dict.fromkeys(layers[k]))
+        modified_symbols = list(dict.fromkeys(modified_symbols))
+
+        has_core_changes = len(layers["core"]) > 0
+        has_test_changes = len(layers["tests"]) > 0
+        test_parity_risk = has_core_changes and not has_test_changes
+
+        return {
+            "has_uncommitted_diffs": bool(combined_diff),
+            "layers": layers,
+            "modified_symbols": modified_symbols,
+            "test_parity_risk": test_parity_risk,
+            "core_files_count": len(layers["core"]),
+            "test_files_count": len(layers["tests"]),
+        }
+
+    def compute_blocker_staleness(
+        self, repo_path: Path, blocker_text: str
+    ) -> Tuple[Optional[int], bool]:
+        """Compute commit age for an active blocker in the work system."""
+        if not blocker_text or not self.is_git_repo(repo_path):
+            return None, False
+
+        words = [w for w in blocker_text.split() if len(w) > 3 and w.isalnum()]
+        if not words:
+            return None, False
+        query = " ".join(words[:2])
+
+        log_sha = self._run_git(repo_path, ["log", "-1", "--format=%H", "-S", query])
+        if not log_sha or not log_sha.strip():
+            return None, False
+
+        commit_sha = log_sha.strip()
+        count_raw = self._run_git(repo_path, ["rev-list", "--count", f"{commit_sha}..HEAD"])
+        if count_raw and count_raw.strip().isdigit():
+            age = int(count_raw.strip())
+            return age, age >= 3
+
+        return None, False

@@ -52,10 +52,24 @@ def render_handoff(envelope: HandoffEnvelope) -> str:
     lines.append("## Blockers")
     if ws.blockers:
         for b in ws.blockers:
-            lines.append(f"- **[{b.severity.upper()}]** {b.description} *(Reason: {b.reason})*")
+            stale_str = (
+                f" ⚠️ **[STALE: {b.age_commits} commits unaddressed]**"
+                if b.stale
+                else ""
+            )
+            lines.append(
+                f"- **[{b.severity.upper()}]{stale_str}** {b.description} *(Reason: {b.reason})*"
+            )
     else:
         lines.append("- None detected.")
     lines.append("")
+
+    if ws.risks:
+        lines.append("## Risks & Warnings")
+        for r in ws.risks:
+            mit_str = f" *(Mitigation: {r.mitigation})*" if r.mitigation else ""
+            lines.append(f"- **[{r.level.upper()}]** {r.description}{mit_str}")
+        lines.append("")
 
     lines.append("## Decisions Made")
     if ws.decisions:
@@ -184,13 +198,25 @@ def render_status(ws: WorkState) -> str:
     lines.append("### Blockers & Dependencies")
     if ws.blockers:
         for b in ws.blockers:
-            lines.append(f"- **[BLOCKER - {b.severity.upper()}]** {b.description}")
+            stale_tag = (
+                f" ⚠️ [STALE: {b.age_commits} commits unaddressed]"
+                if b.stale
+                else ""
+            )
+            lines.append(f"- **[BLOCKER - {b.severity.upper()}]{stale_tag}** {b.description}")
     elif ws.dependencies:
         for d in ws.dependencies:
             lines.append(f"- [DEP] {d.item} (Owner: {d.owner}) - {d.status}")
     else:
         lines.append("- None active.")
     lines.append("")
+
+    if ws.risks:
+        lines.append("### Architectural Risks & Warnings")
+        for r in ws.risks:
+            mit_str = f" *(Mitigation: {r.mitigation})*" if r.mitigation else ""
+            lines.append(f"- **[{r.level.upper()}]** {r.description}{mit_str}")
+        lines.append("")
 
     lines.append("### Next Actions")
     if ws.next_actions:

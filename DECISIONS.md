@@ -86,3 +86,24 @@ This document tracks significant architectural decisions for HowlRelay using lig
   - Robust interoperability across diverse Howl ecosystem repositories without imposing rigid markdown templates.
   - Preserves anti-surveillance boundary by measuring the work artifacts rather than developer formatting conformity.
 
+---
+
+## ADR-0006: Deep Architectural Diff Analysis & Non-Surveilling Blocker Staleness Heuristics
+- **Date:** 2026-09-06
+- **Status:** Accepted
+- **Context:**
+  HowlRelay Milestone 2 requires deeper visibility into code churn and workstream friction without tracking worker activity or violating anti-surveillance policies. HowlCreate dogfooding run 4 (`run-ddef596c`, exploring stigmergic coordination and commit decay) identified that repository diffs and commit histories provide rich work-system signals if analyzed structurally.
+- **Decision:**
+  1. Implement `analyze_diff` in `GitCollector`:
+     - Group uncommitted file changes into architectural layers (`core`, `tests`, `docs`, `config`, `other`).
+     - Extract modified code symbols (functions, classes, methods) directly from unified diff hunk headers (`@@ ... @@ def/class`).
+     - Evaluate **test parity risk**: flag a warning if core source files are modified without accompanying test modifications.
+  2. Implement `compute_blocker_staleness` in `GitCollector`:
+     - Measure blocker age by checking commit history (`git log -S` and `git rev-list --count`) to compute how many commits have landed on the repository branch while the blocker remained unresolved.
+     - If a blocker has persisted across >= 3 commits, mark it `stale = True`.
+  3. Integrate with `MeetingReasoningEngine`:
+     - Stale blockers or critical blockers escalate the synchronous alignment recommendation to `RECOMMENDED` with explicit inspectable triggers (`stale_blockers(N)`).
+- **Consequences:**
+  - High-signal async handoffs that surface architectural risk (e.g. test parity gaps) and stuck work without surveilling the developer.
+  - Objective escalation triggers grounded entirely in Git commit evidence.
+

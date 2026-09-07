@@ -161,4 +161,37 @@ Resolve filename truncation and false-staging bug identified during live cross-r
 - `flake8 src tests` -> 0 errors/warnings.
 - Verified on `howlcreate`: files involved accurately reported as `src/howlcreate/...` with 0 staged, 3 unstaged.
 
+---
+
+## Session 5: 2026-09-06T22:04:00-04:00 (Deep Diff Architecture & Non-Surveilling Staleness)
+
+### Goal
+Implement Milestone 2 enhancements inspired by HowlCreate creative exploration run 4 (`run-ddef596c`): deep architectural diff summarization, symbol extraction, test parity risk analysis, and work-system blocker staleness tracking.
+
+### Problems Addressed
+1. **Shallow Diff Context**: Previous diff collection only provided line stats (`diff --stat`), omitting which architectural layers (`core`, `tests`, `docs`, `config`) were touched and which functions/classes were modified.
+2. **Silent Test Parity Gaps**: Changes to core production code without accompanying test modifications were unflagged.
+3. **Blocker Staleness Invisibility**: Blockers were only tracked as binary presence without measuring persistence across commits in the work system.
+
+### Work Completed
+1. Added `GitCollector.analyze_diff`:
+   - Categorizes changed files into architectural layers (`core`, `tests`, `docs`, `config`, `other`).
+   - Extracts modified symbol signatures (`def`, `class`) from unified diff hunk headers.
+   - Computes `test_parity_risk` (flagged when core logic is modified without test modifications).
+2. Added `GitCollector.compute_blocker_staleness`:
+   - Inspects Git commit history (`git log -S` and `git rev-list --count`) to compute commit age of active blockers.
+   - Marks blockers `stale = True` when unaddressed across >= 3 commits.
+3. Updated `MeetingReasoningEngine`:
+   - Stale blockers escalate meeting recommendations to `RECOMMENDED` with trigger `stale_blockers(N)`.
+4. Updated `HandoffEngine` and `renderers/markdown`:
+   - Automatically maps `test_parity_risk` to active risks with mitigation guidance.
+   - Surfaces `[STALE: N commits unaddressed]` badges in both handoff and status markdown.
+5. Recorded ADR-0006 in `DECISIONS.md`.
+6. Added 3 new unit tests (`test_git_collector_deep_diff_and_test_parity`, `test_git_collector_blocker_staleness`, `test_meeting_recommended_on_stale_blocker`).
+
+### Verification
+- `pytest -v` -> 28 passed in 0.77s.
+- `flake8 src tests` -> 0 errors/warnings.
+- Verified end-to-end against `howlcreate` and `howlrelay`.
+
 

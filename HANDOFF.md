@@ -4,26 +4,25 @@
 Build and launch HowlRelay: an async-first coordination and handoff system for distributed engineering teams. Deliver Milestone 0 (foundation, packaging, CI) and Milestone 1 (Evidence-Based Async Handoffs v1).
 
 ## Current State
-Milestones 0, 1, GitHub Pages integration, and Cross-Repo Dogfooding Enhancements are complete:
+Milestones 0, 1, 2, GitHub Pages integration, and Cross-Repo Dogfooding Enhancements are complete:
 - GitHub repository created: `howlcipher/howlrelay`.
 - Full package structure implemented in `src/howlrelay`.
-- 24 unit, integration, and documentation tests passing (`pytest`).
+- 28 unit, integration, and documentation tests passing (`pytest`).
 - Zero lint issues (`flake8 src tests`).
 - CLI commands implemented: `howlrelay status`, `howlrelay handoff`, `howlrelay brief`.
 - Self-dogfooding verified on `howlrelay` itself with epistemic provenance.
 - Cross-repo dogfooding verified against `howlcipher/howlcreate`.
-- CI workflow established in `.github/workflows/ci.yml`.
-- Public GitHub Pages site deployed under `docs/` using Howl design tokens.
+- Deep architectural diff analysis with layer breakdown and symbol extraction (Milestone 2 / ADR-0006).
+- Test parity risk detection (alerts when core logic is touched without tests).
+- Blocker staleness heuristics and meeting recommendation triggers (Milestone 2 / ADR-0006).
 
 ## Last Completed Work
-- Implemented heterogeneous continuity parsing supporting numbered headings and heading synonyms (ADR-0005).
-- Implemented code-fence isolation so code comments inside bash blocks do not trigger markdown section splits (ADR-0005).
-- Implemented canonical file audit checking standard subdirectories (`docs/journal`, `docs/adr`) before declaring files missing.
-- Added discovery of creative dogfood artifacts (`dogfood/*.json`, `dogfood/*.md`).
-- Added HEAD modified files and key files fallback when working tree is clean.
-- Fixed porcelain status parser leading-whitespace stripping in `_run_git`, preserving column alignment, correct staging detection, and rename parsing.
-- Added reproduction and regression tests in `tests/test_adapters.py`.
-- Verified end-to-end `howlrelay status`, `howlrelay handoff`, and `howlrelay brief` against `howlcipher/howlcreate`.
+- Implemented `analyze_diff` in `GitCollector`: categorizes changes into architectural layers (`core`, `tests`, `docs`, `config`), extracts modified symbol headers (`def`, `class`), and evaluates test parity risk.
+- Implemented `compute_blocker_staleness` in `GitCollector`: queries commit history to determine commit age of blockers and mark stale status.
+- Enhanced `MeetingReasoningEngine`: triggers synchronous meeting recommendations on stale or critical blockers with inspectable triggers.
+- Surfaced test parity risk in `HandoffEngine` and rendered architectural layer diff summaries and stale badges in markdown reports.
+- Recorded ADR-0006 in `DECISIONS.md`.
+- Added unit tests in `tests/test_adapters.py` and `tests/test_meeting_reasoning.py`.
 
 ## Important Decisions
 - **Measure the work system, not the worker:** Strict prohibition on keystroke, mouse, camera, presence, or idle surveillance (ADR-0001).
@@ -31,23 +30,28 @@ Milestones 0, 1, GitHub Pages integration, and Cross-Repo Dogfooding Enhancement
 - **Inspectable Meeting-Required Reasoning:** Four discrete states (`NOT_REQUIRED`, `RECOMMENDED`, `REQUIRES_HUMAN_DECISION`, `INSUFFICIENT_EVIDENCE`) backed by concrete triggers (ADR-0003).
 - **Clean HowlFrame boundary:** Integrates with HowlFrame policies when present, gracefully falls back when absent (ADR-0004).
 - **Heterogeneous continuity parsing:** Code-fence aware markdown extraction, synonym maps, and non-surveillance codebase grounding (ADR-0005).
+- **Deep Architectural Diff & Blocker Staleness:** Non-surveilling work-system signals via unified diff hunks, symbol extraction, test parity risk, and commit-age decay (ADR-0006).
 
 ## Files / Components Involved
-- `src/howlrelay/adapters/continuity.py`
 - `src/howlrelay/adapters/git.py`
 - `src/howlrelay/engine.py`
+- `src/howlrelay/model.py`
+- `src/howlrelay/reasoning/meeting.py`
+- `src/howlrelay/renderers/markdown.py`
 - `tests/test_adapters.py`
+- `tests/test_meeting_reasoning.py`
 - `DECISIONS.md`
 - `PROJECT_STATE.md`
 - `JOURNAL.md`
 - `HANDOFF.md`
 
 ## Verification Performed
-- `pytest -v` -> 24 passed in 0.72s.
+- `pytest -v` -> 28 passed in 0.77s.
 - `flake8 src tests` -> clean (exit code 0).
 - `howlrelay status --repo /var/home/howlcipher/howlcreate` -> correctly extracted objective, completed work, active work, and status.
 - `howlrelay handoff --repo /var/home/howlcipher/howlcreate` -> verified exact starting commands and key files extraction.
 - `howlrelay brief --repo /var/home/howlcipher/howlcreate` -> verified clean team brief without activity theater.
+- `howlrelay handoff --repo /run/media/system/tallgeese/dev/howlrelay` -> verified self-dogfooding with deep diff and epistemic provenance.
 
 ## Known Failures
 None.
@@ -56,13 +60,10 @@ None.
 None.
 
 ## Next Recommended Action
-1. Begin Milestone 2 enhancements:
-   - Deep git diff-summary heuristics in `status` and `brief`.
-   - Blocker age tracking and dependency staleness detection.
-2. Advance Milestone 3:
-   - Implement native HowlFrame policy artifact (`.howl` / `.hfbc`) for handoff approval verification.
-3. Advance Milestone 4:
-   - GitHub PR and Issue adapter via `gh` CLI.
+1. Begin Milestone 3:
+   - Compile and verify a native HowlFrame policy artifact (`.howl` / `.hfbc`) for HowlRelay handoff approval.
+2. Advance Milestone 4:
+   - GitHub PR, Issue, and CI evidence collector adapter via `gh` CLI.
 
 ## Exact Starting Commands
 ```bash

@@ -136,12 +136,38 @@ class HandoffEngine:
             else (ConfidenceLevel.MEDIUM if is_git_repo else ConfidenceLevel.LOW)
         )
 
-        # 6. Evaluate meeting recommendation
+        # 6. Evaluate meeting recommendation & risks
         has_continuity_docs = any(
             ev.type == EvidenceType.CONTINUITY_DOC for ev in evidence
         )
         dependencies: List[Dependency] = []
         risks: List[Risk] = []
+
+        # Check staleness of active blockers against git commit history
+        if is_git_repo:
+            for b in blockers:
+                age, is_stale = self.git_collector.compute_blocker_staleness(
+                    repo_path, b.description
+                )
+                if age is not None:
+                    b.age_commits = age
+                    b.stale = is_stale
+
+        # Inspect diff evidence for test parity risks
+        for ev in evidence:
+            if ev.type == EvidenceType.GIT_DIFF and ev.metadata.get("test_parity_risk"):
+                risks.append(
+                    Risk(
+                        level="MEDIUM",
+                        description=(
+                            "Test Parity Gap: Core source files modified without "
+                            "corresponding test modifications."
+                        ),
+                        mitigation=(
+                            "Add matching unit or integration tests before completing handoff."
+                        ),
+                    )
+                )
 
         meeting_rec = self.meeting_engine.evaluate(
             evidence=evidence,

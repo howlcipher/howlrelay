@@ -165,3 +165,70 @@ def test_git_collector_porcelain_parsing(monkeypatch, tmp_path: Path):
     assert status_ev.metadata["untracked_files"] == ["untracked.txt"]
     assert "src/modified_unstaged.py" in status_ev.metadata["all_uncommitted_files"]
     assert "src/renamed.py" in status_ev.metadata["all_uncommitted_files"]
+
+
+def test_git_collector_deep_diff_and_test_parity(monkeypatch, tmp_path: Path):
+    collector = GitCollector()
+
+    # Case 1: Core modified, no tests -> test_parity_risk = True
+    diff_core_only = (
+        "diff --git a/src/core.py b/src/core.py\n"
+        "@@ -10,0 +11,5 @@ def process_transaction(amount):\n"
+        "+    verify(amount)\n"
+    )
+
+    def mock_run_git_core(repo_path, args):
+        if args == ["diff", "-U0"]:
+            return diff_core_only
+        if args == ["diff", "--cached", "-U0"]:
+            return ""
+        return None
+
+    monkeypatch.setattr(collector, "_run_git", mock_run_git_core)
+    res = collector.analyze_diff(tmp_path)
+    assert res["has_uncommitted_diffs"] is True
+    assert "src/core.py" in res["layers"]["core"]
+    assert len(res["layers"]["tests"]) == 0
+    assert res["test_parity_risk"] is True
+    assert "def process_transaction" in res["modified_symbols"]
+
+    # Case 2: Core modified AND tests modified -> test_parity_risk = False
+    diff_with_tests = (
+        "diff --git a/src/core.py b/src/core.py\n"
+        "@@ -10,0 +11,5 @@ def process_transaction(amount):\n"
+        "+    verify(amount)\n"
+        "diff --git a/tests/test_core.py b/tests/test_core.py\n"
+        "@@ -20,0 +21,4 @@ def test_process_transaction():\n"
+        "+    assert True\n"
+    )
+
+    def mock_run_git_tests(repo_path, args):
+        if args == ["diff", "-U0"]:
+            return diff_with_tests
+        if args == ["diff", "--cached", "-U0"]:
+            return ""
+        return None
+
+    monkeypatch.setattr(collector, "_run_git", mock_run_git_tests)
+    res_with_tests = collector.analyze_diff(tmp_path)
+    assert res_with_tests["test_parity_risk"] is False
+    assert len(res_with_tests["layers"]["tests"]) == 1
+
+
+def test_git_collector_blocker_staleness(monkeypatch, tmp_path: Path):
+    collector = GitCollector()
+
+    def mock_run_git(repo_path, args):
+        if args == ["rev-parse", "--is-inside-work-tree"]:
+            return "true"
+        if args[:4] == ["log", "-1", "--format=%H", "-S"]:
+            return "abc12345"
+        if args[:2] == ["rev-list", "--count"]:
+            return "4\n"
+        return None
+
+    monkeypatch.setattr(collector, "_run_git", mock_run_git)
+
+    age, is_stale = collector.compute_blocker_staleness(tmp_path, "Third party outage on API")
+    assert age == 4
+    assert is_stale is True

@@ -117,3 +117,37 @@ def test_meeting_insufficient_evidence():
     )
     assert rec.recommendation == MeetingRecommendationState.INSUFFICIENT_EVIDENCE
     assert "not a Git repository" in rec.reason
+
+
+def test_meeting_recommended_on_stale_blocker():
+    engine = MeetingReasoningEngine()
+    rec = engine.evaluate(
+        evidence=[
+            Evidence(
+                type=EvidenceType.GIT_COMMIT,
+                ref="12345678",
+                source="git",
+                description="Commit",
+            )
+        ],
+        decisions=[],
+        blockers=[
+            Blocker(
+                description="Waiting on third-party API specification",
+                reason="External dependency not responding",
+                severity="MEDIUM",
+                age_commits=5,
+                stale=True,
+            )
+        ],
+        dependencies=[],
+        risks=[],
+        test_status="PASSED",
+        known_failures=[],
+        has_git_repo=True,
+        has_continuity_docs=True,
+    )
+    assert rec.recommendation == MeetingRecommendationState.RECOMMENDED
+    assert "stale" in rec.reason
+    assert "5 commits old" in rec.reason
+    assert any("stale_blockers" in t for t in rec.triggers)

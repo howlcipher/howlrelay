@@ -45,15 +45,15 @@ Authoritative snapshot of project status, architecture, features, and immediate 
 - [x] Heterogeneous continuity parser supporting numbered headings, heading synonyms, code-fence isolation, and subdirectories (ADR-0005).
 - [x] Creative dogfood artifacts collector and clean worktree key files fallback.
 - [x] Column-aligned git porcelain status parser with rename handling and whitespace preservation.
-- [x] Comprehensive test suite (25 unit and integration tests passing).
+- [x] Deep architectural diff analysis with layer breakdown and symbol extraction (ADR-0006).
+- [x] Test parity risk detection (alerts when core code is modified without tests).
+- [x] Commit-age blocker staleness heuristics and meeting recommendation triggers (ADR-0006).
+- [x] Comprehensive test suite (28 unit and integration tests passing).
 - [x] Cross-dogfooding verification on sibling repository `howlcipher/howlcreate`.
 
 ---
 
 ## Incomplete / Next Priorities
-- [ ] Milestone 2 enhancements:
-  - Deep diff-summary analysis in status/brief.
-  - Blocker age tracking and dependency staleness detection.
 - [ ] Milestone 3 HowlFrame deep policy:
   - Compile and verify a native `.howl` / `.hfbc` policy for HowlRelay handoff approval.
 - [ ] Milestone 4 GitHub integration:

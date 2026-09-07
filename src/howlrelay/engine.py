@@ -82,7 +82,24 @@ class HandoffEngine:
                 if all_uncommitted:
                     has_uncommitted = True
 
+        # When working tree is clean, surface key files from continuity or HEAD modified files
+        if not files_involved:
+            if context.get("key_files"):
+                files_involved.extend(context["key_files"])
+            for ev in evidence:
+                if (
+                    ev.type == EvidenceType.GIT_COMMIT
+                    and ev.metadata.get("head_modified_files")
+                ):
+                    files_involved.extend(ev.metadata["head_modified_files"])
+
         files_involved = list(dict.fromkeys(files_involved))
+
+        # If no next actions were explicitly given, but active work exists, populate next action
+        if not next_actions and active_work:
+            next_actions.append(
+                NextAction(action=f"Continue active priority: {active_work[0]}", priority="NEXT")
+            )
 
         # 4. Process test verification evidence
         tests_run: List[Dict[str, Any]] = []
@@ -113,8 +130,10 @@ class HandoffEngine:
         elif not is_git_repo or (not completed and not active_work):
             status = WorkStatus.UNKNOWN
 
-        confidence = ConfidenceLevel.HIGH if (is_git_repo and decisions and completed) else (
-            ConfidenceLevel.MEDIUM if is_git_repo else ConfidenceLevel.LOW
+        confidence = (
+            ConfidenceLevel.HIGH
+            if (is_git_repo and (decisions or completed) and (completed or not has_uncommitted))
+            else (ConfidenceLevel.MEDIUM if is_git_repo else ConfidenceLevel.LOW)
         )
 
         # 6. Evaluate meeting recommendation

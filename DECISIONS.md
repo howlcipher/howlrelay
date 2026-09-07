@@ -69,3 +69,20 @@ This document tracks significant architectural decisions for HowlRelay using lig
 - **Consequences:**
   - Maintains ecosystem alignment with HowlFrame's "intent is not authority" model.
   - Preserves standalone local utility across any developer workstation or standard CI runner.
+
+---
+
+## ADR-0005: Heterogeneous Continuity Parsing and Code-Fence-Aware Extraction
+- **Date:** 2026-09-06
+- **Status:** Accepted
+- **Context:**
+  Dogfooding HowlRelay against sibling repository `howlcipher/howlcreate` exposed that real repositories frequently use numbered section headings (`## 1. System Summary`), heading synonyms (`Commands to Resume Work`, `What Works Right Now`), code comments starting with `#` inside bash blocks, and subdirectories (`docs/journal/`, `dogfood/`). Strict single-word regexes failed to extract structured context, yielding "Unknown objective" and empty completed work.
+- **Decision:**
+  1. Continuity parsing must be code-fence-aware: lines starting with `#` inside fenced blocks (` ``` `) must never be treated as Markdown heading boundaries.
+  2. Section extraction must support numbered/bulleted prefixes (`1.`, `A.`) and priority synonym maps for standard engineering sections (Objective/Summary, Completed Work, Active Work, Starting Commands, Key Files).
+  3. Canonical file audits must inspect standard subdirectories (`docs/`, `.github/`) for journals and decisions before flagging them missing.
+  4. Working trees that are clean must fall back to surfacing key files documented in continuity or HEAD commit touched files so incoming agents retain immediate file context.
+- **Consequences:**
+  - Robust interoperability across diverse Howl ecosystem repositories without imposing rigid markdown templates.
+  - Preserves anti-surveillance boundary by measuring the work artifacts rather than developer formatting conformity.
+

@@ -56,6 +56,57 @@ def test_continuity_collector(tmp_path: Path):
     assert "ADR-0001" in ctx["decisions"][0].decision
 
 
+def test_continuity_collector_heterogeneous_formats(tmp_path: Path):
+    collector = ContinuityCollector()
+
+    # Create HowlCreate-style numbered headers and docs/journal layout
+    (tmp_path / "HANDOFF.md").write_text(
+        "# HowlCreate Engineering Handoff\n\n"
+        "**Current Status**: Milestone 1 Complete / Actively Dogfooding\n\n"
+        "## 1. System Summary\n\n"
+        "Computational creativity and open-ended problem-solving layer.\n\n"
+        "## 2. What Works Right Now\n\n"
+        "- 12 composable operators implemented and tested.\n"
+        "- Lineage DAG tracks ancestry.\n\n"
+        "## 3. What Is in Progress / Known Limitations\n\n"
+        "- Dogfood Target 3 cross-repo run analysis.\n\n"
+        "## 4. Key Files & Architecture\n\n"
+        "- `src/howlcreate/models/idea.py`\n"
+        "- `src/howlcreate/engine/pipeline.py`\n\n"
+        "## 5. Commands to Resume Work\n\n"
+        "```bash\n"
+        "pytest -v\n"
+        "howlcreate --version\n"
+        "```\n"
+    )
+
+    docs_journal = tmp_path / "docs" / "journal"
+    docs_journal.mkdir(parents=True)
+    (docs_journal / "2026-09-06-session-01.md").write_text(
+        "# Session 01\n\nCompleted initial release."
+    )
+
+    dogfood_dir = tmp_path / "dogfood"
+    dogfood_dir.mkdir()
+    (dogfood_dir / "01_test.json").write_text("{}")
+    (dogfood_dir / "01_test.md").write_text("# Dogfood 1")
+
+    evidence = collector.collect(tmp_path)
+    audit = next(e for e in evidence if e.ref == "continuity_files_audit")
+    # JOURNAL.md should be discovered via docs/journal/
+    assert "JOURNAL.md" in audit.metadata["found"]
+
+    ctx = collector.extract_structured_context(tmp_path)
+    assert "Computational creativity" in ctx["objective"]
+    assert len(ctx["completed"]) >= 2
+    assert any("12 composable operators" in item for item in ctx["completed"])
+    assert len(ctx["active_work"]) >= 1
+    assert any("Dogfood Target 3" in item for item in ctx["active_work"])
+    assert len(ctx["starting_commands"]) == 2
+    assert "pytest -v" in ctx["starting_commands"]
+    assert len(ctx["key_files"]) >= 2
+
+
 def test_test_collector(tmp_path: Path):
     collector = TestCollector()
     assert collector.collector_name() == "test_runner"

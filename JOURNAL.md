@@ -106,3 +106,38 @@ Implement public GitHub Pages site for HowlRelay using the canonical Howl ecosys
 - `pytest -v` -> 23 passed in 1.94s.
 - `flake8 src tests` -> 0 errors/warnings.
 
+---
+
+## Session 3: 2026-09-06T21:40:00-04:00 (Cross-Repository Dogfood & Heterogeneous Parsing)
+
+### Goal
+Dogfood HowlRelay against sibling repository `howlcipher/howlcreate`. Identify and resolve handoff and coordination failures, and ensure transferable async state between repositories.
+
+### Starting State
+- HowlRelay: 23 tests passing, clean flake8, commit `84ac5c2`.
+- HowlCreate: 35 tests passing, actively running Dogfood Target 3 (`run-3c13e4f4` exploring cross-repo dogfooding via local Ollama).
+
+### Problems Discovered & Coordination Limitations
+1. **Header Parsing Fragility**: Running `howlrelay handoff --repo ../howlcreate` reported `Unknown objective`, `Completed Work: None explicitly recorded`, and `Active Work: No active items tracked`. `ContinuityCollector` strictly matched unnumbered exact headers (`#+ Objective`), failing on numbered headers (`## 1. System Summary`, `## 2. What Works Right Now`) and synonyms.
+2. **Code-Fence Interference**: A code comment `# Run all tests` inside a fenced bash block was treated as a Markdown header boundary, truncating extracted starting commands.
+3. **Subdirectory Invisibility**: `docs/journal/` was ignored by canonical file audits, wrongly declaring `JOURNAL.md` missing.
+4. **Clean Worktree Context Loss**: In a clean Git working tree, `files_involved` was empty, omitting key files documented in continuity or touched by HEAD commit.
+
+### Work Completed
+1. Created reproduction test `test_continuity_collector_heterogeneous_formats` in `tests/test_adapters.py`.
+2. Reimplemented `_extract_markdown_section` with code-fence awareness, preventing comment lines inside fenced blocks from triggering header breaks.
+3. Added `_extract_section_by_synonyms` covering standard variations for Objective/Summary, Completed Work, Active Work, Starting Commands, Key Files, and Blockers.
+4. Extended canonical file audit to check `docs/`, `.github/`, and subdirectories (`docs/journal`, `docs/adr`).
+5. Added discovery of creative dogfood artifacts (`dogfood/*.json`, `dogfood/*.md`).
+6. Added `head_modified_files` extraction to `GitCollector` and updated `HandoffEngine` to surface key files and HEAD modified files when the working tree is clean.
+7. Recorded ADR-0005.
+
+### Verification
+- `pytest -v` -> 24 passed in 0.72s.
+- `flake8 src tests` -> 0 errors/warnings.
+- Real dogfood on `howlcreate`:
+  - `howlrelay status --repo /var/home/howlcipher/howlcreate` correctly extracts Objective, Completed Work (17 items), Active Work (7 items), Next Actions, and High confidence.
+  - `howlrelay handoff --repo /var/home/howlcipher/howlcreate` extracts all starting commands and 13 key files.
+  - `howlrelay brief --repo /var/home/howlcipher/howlcreate` produces crisp, grounded executive summary.
+
+

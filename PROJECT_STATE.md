@@ -42,8 +42,10 @@ Authoritative snapshot of project status, architecture, features, and immediate 
 - [x] CLI commands: `howlrelay status`, `howlrelay handoff`, `howlrelay brief` (`howlrelay.cli.main`).
 - [x] Structured output rendering: Markdown, formatted JSON, clean YAML (`howlrelay.renderers`).
 - [x] GitHub Actions CI workflow for test matrix (3.10, 3.11, 3.12, 3.13) and flake8 linting.
-- [x] Comprehensive test suite (21 unit and integration tests passing).
-- [x] Self-dogfooding handoff verification on HowlRelay repository itself.
+- [x] Heterogeneous continuity parser supporting numbered headings, heading synonyms, code-fence isolation, and subdirectories (ADR-0005).
+- [x] Creative dogfood artifacts collector and clean worktree key files fallback.
+- [x] Comprehensive test suite (24 unit and integration tests passing).
+- [x] Cross-dogfooding verification on sibling repository `howlcipher/howlcreate`.
 
 ---
 
@@ -72,13 +74,14 @@ Authoritative snapshot of project status, architecture, features, and immediate 
 - Local Git repository inspection (`git` CLI).
 - Pytest test runner and cache inspection (`.pytest_cache`).
 - HowlFrame toolchain integration (`/home/howlcipher/.local/bin/howlframe`).
+- Sibling cross-repository dogfooding (`howlcipher/howlcreate`).
 
 ---
 
 ## Test Counts & Status
-- **Test Count:** 21 passing, 0 failing.
+- **Test Count:** 24 passing, 0 failing.
 - **Lint:** 0 flake8 errors/warnings.
-- **Execution Time:** ~0.6s.
+- **Execution Time:** ~0.7s.
 
 ---
 

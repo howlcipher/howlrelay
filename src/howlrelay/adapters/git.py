@@ -76,6 +76,14 @@ class GitCollector(BaseEvidenceCollector):
             commit_subject = self._run_git(repo_path, ["log", "-1", "--format=%s"]) or ""
             author = self._run_git(repo_path, ["log", "-1", "--format=%an"]) or ""
             author_date = self._run_git(repo_path, ["log", "-1", "--format=%aI"]) or ""
+            head_files_raw = self._run_git(
+                repo_path, ["diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"]
+            )
+            head_modified_files = (
+                [f.strip() for f in head_files_raw.splitlines() if f.strip()]
+                if head_files_raw
+                else []
+            )
             evidence_list.append(
                 Evidence(
                     type=EvidenceType.GIT_COMMIT,
@@ -88,6 +96,7 @@ class GitCollector(BaseEvidenceCollector):
                         "subject": commit_subject,
                         "author": author,
                         "date": author_date,
+                        "head_modified_files": head_modified_files,
                     },
                 )
             )

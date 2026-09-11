@@ -11,6 +11,7 @@ from howlrelay import __version__
 from howlrelay.adapters.continuity import ContinuityCollector
 from howlrelay.adapters.git import GitCollector
 from howlrelay.adapters.howlframe import HowlFrameCollector
+from howlrelay.adapters.howldream import HowlDreamCollector
 from howlrelay.adapters.test_runner import TestCollector
 from howlrelay.model import (
     Blocker,
@@ -38,12 +39,14 @@ class HandoffEngine:
         continuity_collector: Optional[ContinuityCollector] = None,
         test_collector: Optional[TestCollector] = None,
         howlframe_collector: Optional[HowlFrameCollector] = None,
+        howldream_collector: Optional[HowlDreamCollector] = None,
         meeting_engine: Optional[MeetingReasoningEngine] = None,
     ):
         self.git_collector = git_collector or GitCollector()
         self.continuity_collector = continuity_collector or ContinuityCollector()
         self.test_collector = test_collector or TestCollector()
         self.howlframe_collector = howlframe_collector or HowlFrameCollector()
+        self.howldream_collector = howldream_collector or HowlDreamCollector()
         self.meeting_engine = meeting_engine or MeetingReasoningEngine()
 
     def inspect_repo(self, repo_path: Path, run_tests: bool = False) -> HandoffEnvelope:
@@ -57,6 +60,7 @@ class HandoffEngine:
         evidence.extend(self.continuity_collector.collect(repo_path))
         evidence.extend(self.test_collector.collect(repo_path))
         evidence.extend(self.howlframe_collector.collect(repo_path))
+        evidence.extend(self.howldream_collector.collect(repo_path))
 
         # 2. Extract structured context from continuity documents
         context = self.continuity_collector.extract_structured_context(repo_path)

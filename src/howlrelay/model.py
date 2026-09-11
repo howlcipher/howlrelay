@@ -21,6 +21,7 @@ class EvidenceType(str, Enum):
     CONTINUITY_DOC = "continuity_doc"
     HOWLFRAME_POLICY = "howlframe_policy"
     DECISION_RECORD = "decision_record"
+    HOWLDREAM_EXPLORATION = "howldream_exploration"
     CUSTOM = "custom"
 
 

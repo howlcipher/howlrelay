@@ -5,6 +5,7 @@ from howlrelay.adapters.git import GitCollector
 from howlrelay.adapters.continuity import ContinuityCollector
 from howlrelay.adapters.test_runner import TestCollector
 from howlrelay.adapters.howlframe import HowlFrameCollector
+from howlrelay.adapters.howldream import HowlDreamCollector
 
 __all__ = [
     "BaseEvidenceCollector",
@@ -12,4 +13,5 @@ __all__ = [
     "ContinuityCollector",
     "TestCollector",
     "HowlFrameCollector",
+    "HowlDreamCollector",
 ]

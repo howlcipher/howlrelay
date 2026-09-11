@@ -32,5 +32,6 @@ def test_index_html_contains_critical_sections_and_links():
     assert "https://howlcipher.github.io/howlcreate/" in content
     assert "https://howlcipher.github.io/howlplane/" in content
     assert "https://howlcipher.github.io/howlframe/" in content
+    assert "https://howlcipher.github.io/howlproof/" in content
     assert "https://howlcipher.github.io/howlchangeops/" in content
     assert "https://github.com/howlcipher/howlrelay" in content

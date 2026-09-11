@@ -29,10 +29,6 @@ class HowlFrameCollector(BaseEvidenceCollector):
         if home_local.is_file():
             return str(home_local)
 
-        dev_bin = Path("/run/media/system/tallgeese/dev/howlframe/howlframe")
-        if dev_bin.is_file():
-            return str(dev_bin)
-
         return None
 
     def _discover_policies(self, repo_path: Path) -> List[Path]:

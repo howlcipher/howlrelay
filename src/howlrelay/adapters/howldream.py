@@ -9,7 +9,7 @@ import json
 import os
 from pathlib import Path
 import shutil
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 from howlrelay.adapters.base import BaseEvidenceCollector
 from howlrelay.model import Evidence, EvidenceType
@@ -36,10 +36,6 @@ class HowlDreamCollector(BaseEvidenceCollector):
         home_local = Path.home() / ".local" / "bin" / "howldream"
         if home_local.is_file() and os.access(home_local, os.X_OK):
             return str(home_local)
-
-        dev_venv_bin = Path("/run/media/system/tallgeese/dev/howldream/.venv/bin/howldream")
-        if dev_venv_bin.is_file() and os.access(dev_venv_bin, os.X_OK):
-            return str(dev_venv_bin)
 
         return None
 

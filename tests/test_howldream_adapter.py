@@ -10,7 +10,6 @@ Unit and integration tests for HowlRelay's HowlDream exploration adapter:
 
 import json
 from pathlib import Path
-import pytest
 
 from howlrelay.adapters.howldream import HowlDreamCollector
 from howlrelay.engine import HandoffEngine

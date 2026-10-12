@@ -65,7 +65,9 @@ howlrelay brief
 ```
 
 ### Options & Formats
-All commands support structured export and target repository selection:
+All commands support structured export and target repository selection.
+`--json` and `--yaml` are shortcuts for `--format json` and `--format yaml`.
+Specify one format option per command:
 ```bash
 howlrelay handoff --repo /path/to/project --format markdown
 howlrelay handoff --json

@@ -195,3 +195,7 @@ Implement Milestone 2 enhancements inspired by HowlCreate creative exploration r
 - Verified end-to-end against `howlcreate` and `howlrelay`.
 
 
+
+## 2026-10-12 HOWL-E2E-UX-001 UX-002
+
+Reproduced README handoff --json rejection. Added failing command-level tests, then added mutually exclusive JSON/YAML shortcuts to status, handoff and brief. Existing renderers and authority behavior remain unchanged. Baseline suite: 33 passed. Initial nine regressions failed before repair; the final expanded matrix produced 15 failed, 3 passed, 7 deselected against baseline. Final verification is recorded in HANDOFF.md.

@@ -79,3 +79,14 @@ howlrelay handoff --run-tests
 - Grounding: Never fabricate missing information. "Unknown" is strictly preferred over guessed data.
 - Distinguish between observed facts, inferred state, missing information, and recommendations.
 - Keep HowlRelay loosely coupled to HowlFrame so it works out of the box on standard developer machines.
+
+## HOWL-E2E-UX-001 UX-002
+
+The documented JSON/YAML shortcuts now work on status, handoff and brief.
+Baseline: 33 tests passed. Final added-test matrix against baseline: 15 failed, 3 passed, 7 deselected.
+Final verification: pytest 51 passed, flake8 src tests exit 0.
+The shortcut render tests respect the nested handoff work_state contract.
+Independent review is being reconciled before branch publication.
+Next: confirm final review and open a PR against main; do not merge.
+
+Additional regressions cover conflicting options on all three commands and preserve default Markdown output.

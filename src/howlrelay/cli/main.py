@@ -44,11 +44,20 @@ def parse_args(args: Optional[list] = None) -> argparse.Namespace:
         default=Path.cwd(),
         help="Path to repository to inspect (default: current directory).",
     )
-    parser_status.add_argument(
+    format_status = parser_status.add_mutually_exclusive_group()
+    format_status.add_argument(
         "--format",
         choices=["markdown", "json", "yaml"],
-        default="markdown",
+        default=None,
         help="Output format (default: markdown).",
+    )
+    format_status.add_argument(
+        "--json", dest="format", action="store_const", const="json",
+        help="Output JSON (shortcut for --format json).",
+    )
+    format_status.add_argument(
+        "--yaml", dest="format", action="store_const", const="yaml",
+        help="Output YAML (shortcut for --format yaml).",
     )
     parser_status.add_argument(
         "--output",
@@ -68,11 +77,20 @@ def parse_args(args: Optional[list] = None) -> argparse.Namespace:
         default=Path.cwd(),
         help="Path to repository to inspect (default: current directory).",
     )
-    parser_handoff.add_argument(
+    format_handoff = parser_handoff.add_mutually_exclusive_group()
+    format_handoff.add_argument(
         "--format",
         choices=["markdown", "json", "yaml"],
-        default="markdown",
+        default=None,
         help="Output format (default: markdown).",
+    )
+    format_handoff.add_argument(
+        "--json", dest="format", action="store_const", const="json",
+        help="Output JSON (shortcut for --format json).",
+    )
+    format_handoff.add_argument(
+        "--yaml", dest="format", action="store_const", const="yaml",
+        help="Output YAML (shortcut for --format yaml).",
     )
     parser_handoff.add_argument(
         "--update-handoff",
@@ -102,11 +120,20 @@ def parse_args(args: Optional[list] = None) -> argparse.Namespace:
         default=Path.cwd(),
         help="Path to repository to inspect (default: current directory).",
     )
-    parser_brief.add_argument(
+    format_brief = parser_brief.add_mutually_exclusive_group()
+    format_brief.add_argument(
         "--format",
         choices=["markdown", "json", "yaml"],
-        default="markdown",
+        default=None,
         help="Output format (default: markdown).",
+    )
+    format_brief.add_argument(
+        "--json", dest="format", action="store_const", const="json",
+        help="Output JSON (shortcut for --format json).",
+    )
+    format_brief.add_argument(
+        "--yaml", dest="format", action="store_const", const="yaml",
+        help="Output YAML (shortcut for --format yaml).",
     )
     parser_brief.add_argument(
         "--output",
@@ -115,7 +142,10 @@ def parse_args(args: Optional[list] = None) -> argparse.Namespace:
         help="Output file path (default: stdout).",
     )
 
-    return parser.parse_args(args)
+    parsed = parser.parse_args(args)
+    if parsed.command and parsed.format is None:
+        parsed.format = "markdown"
+    return parsed
 
 
 def write_output(content: str, output_path: Optional[Path]) -> None:

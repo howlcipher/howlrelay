@@ -1,9 +1,40 @@
 """Tests for HowlRelay CLI commands (status, handoff, brief)."""
 
 from pathlib import Path
+import json
 import pytest
+import yaml
 
-from howlrelay.cli.main import main
+from howlrelay.cli.main import main, parse_args
+
+
+@pytest.mark.parametrize("command", ["status", "handoff", "brief"])
+@pytest.mark.parametrize("flag", ["--json", "--yaml"])
+def test_documented_format_shortcuts(command, flag, tmp_path, capsys):
+    assert main([command, "--repo", str(tmp_path), flag]) == 0
+    output = capsys.readouterr().out
+    value = json.loads(output) if flag == "--json" else yaml.safe_load(output)
+    assert isinstance(value, dict)
+    state = value["work_state"] if command == "handoff" else value
+    assert state["repo_name"] == tmp_path.name
+
+
+@pytest.mark.parametrize("command", ["status", "handoff", "brief"])
+@pytest.mark.parametrize("flags", [
+    ["--json", "--yaml"],
+    ["--json", "--format", "markdown"],
+    ["--format", "json", "--yaml"],
+])
+def test_conflicting_format_options_are_rejected(command, flags, capsys):
+    with pytest.raises(SystemExit) as exc_info:
+        main([command, *flags])
+    assert exc_info.value.code == 2
+    assert "not allowed with argument" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("command", ["status", "handoff", "brief"])
+def test_default_output_format_remains_markdown(command):
+    assert parse_args([command]).format == "markdown"
 
 
 def test_cli_help(capsys):

@@ -12,7 +12,7 @@ Authoritative snapshot of project status, architecture, features, and immediate 
 ## Current Architecture
 - **Language & Runtime:** Python 3.10+ (verified on Python 3.14 locally).
 - **Core Libraries:** `pydantic` (v2) for domain typing & schema validation, `pyyaml` for structured YAML interchange.
-- **Testing & Verification:** `pytest` (21 tests passing), `flake8` (clean, 0 warnings).
+- **Testing & Verification:** `pytest` (51 tests passing), `flake8` (clean, 0 warnings).
 - **Packaging:** Standard `pyproject.toml` with setuptools build-backend and `src/` layout.
 - **Entrypoint:** `howlrelay.cli.main:main` (`howlrelay status`, `howlrelay handoff`, `howlrelay brief`).
 - **Architectural Patterns:**
@@ -48,7 +48,7 @@ Authoritative snapshot of project status, architecture, features, and immediate 
 - [x] Deep architectural diff analysis with layer breakdown and symbol extraction (ADR-0006).
 - [x] Test parity risk detection (alerts when core code is modified without tests).
 - [x] Commit-age blocker staleness heuristics and meeting recommendation triggers (ADR-0006).
-- [x] Comprehensive test suite (28 unit and integration tests passing).
+- [x] Comprehensive test suite (51 unit and integration tests passing).
 - [x] Cross-dogfooding verification on sibling repository `howlcipher/howlcreate`.
 
 ---
@@ -105,3 +105,11 @@ howlrelay brief
 2. Verify GitHub Actions CI triggers and passes.
 3. Compare dogfood-generated handoff with manual `HANDOFF.md`.
 4. Progress toward Milestone 2 / 3 capabilities.
+
+## HOWL-E2E-UX-001 UX-002
+
+Documented JSON and YAML shortcuts now work on all three commands.
+Format options are mutually exclusive; existing --format syntax is preserved.
+Baseline: 33 tests. Eighteen added cases protect rendered shortcuts, conflicts, and the Markdown default.
+
+Additional regressions cover conflicting options on all three commands and preserve default Markdown output.

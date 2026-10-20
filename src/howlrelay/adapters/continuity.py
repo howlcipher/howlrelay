@@ -28,6 +28,8 @@ class ContinuityCollector(BaseEvidenceCollector):
         "HANDOFF.md",
         "DECISIONS.md",
         "JOURNAL.md",
+        # Written by `howlproof handoff --for relay`; used when HANDOFF.md is absent.
+        "howlproof-handoff.md",
     ]
 
     def collector_name(self) -> str:
@@ -251,7 +253,9 @@ class ContinuityCollector(BaseEvidenceCollector):
 
     def extract_structured_context(self, repo_path: Path) -> Dict[str, Any]:
         """Extract parsed workstream elements (objective, blockers, decisions, next actions)."""
-        handoff_path = self._find_file_or_dir(repo_path, "HANDOFF.md")
+        handoff_path = self._find_file_or_dir(repo_path, "HANDOFF.md") or self._find_file_or_dir(
+            repo_path, "howlproof-handoff.md"
+        )
         handoff_content = (
             self._read_file_safe(handoff_path)
             if handoff_path and handoff_path.is_file()

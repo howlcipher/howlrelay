@@ -14,6 +14,9 @@ from typing import List, Optional
 from howlrelay.adapters.base import BaseEvidenceCollector
 from howlrelay.model import Evidence, EvidenceType
 
+#: The envelope HowlDream writes as exploration_envelope.json (howldream contracts.py).
+SUPPORTED_ENVELOPE_SCHEMAS = ("howl.exploration_result/v1",)
+
 
 class HowlDreamCollector(BaseEvidenceCollector):
     """Inspects HowlDream availability and surfaces exploration run evidence."""
@@ -91,6 +94,25 @@ class HowlDreamCollector(BaseEvidenceCollector):
         for env_path in envelopes:
             try:
                 data = json.loads(env_path.read_text(encoding="utf-8"))
+                schema = data.get("schema_version") if isinstance(data, dict) else None
+                if schema not in SUPPORTED_ENVELOPE_SCHEMAS:
+                    # Reading fields of an unknown shape would report guesses as facts.
+                    evidence_list.append(
+                        Evidence(
+                            type=EvidenceType.HOWLDREAM_EXPLORATION,
+                            ref=f"run:{env_path.parent.name}:unsupported_schema",
+                            source="howldream",
+                            description=(
+                                f"Skipped {env_path.name}: schema_version {schema!r} is not one of "
+                                f"{', '.join(SUPPORTED_ENVELOPE_SCHEMAS)}."
+                            ),
+                            metadata={
+                                "schema_version": schema,
+                                "relative_path": str(env_path.relative_to(repo_path)),
+                            },
+                        )
+                    )
+                    continue
                 run_id = data.get("exploration_id") or env_path.parent.name
                 objective = data.get("objective", "")
                 candidates = data.get("candidates", [])

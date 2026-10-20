@@ -67,15 +67,16 @@ class HowlFrameCollector(BaseEvidenceCollector):
         # Binary is available
         version_info = "available"
         try:
+            # `--version` is HowlFrame's documented probe (in its interop descriptor).
             res = subprocess.run(
-                [binary_path, "-help"],
+                [binary_path, "--version"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
                 timeout=5,
             )
-            has_usage = "Usage of howlframe" in (res.stdout + res.stderr)
-            version_info = "operational" if res.returncode == 0 or has_usage else "error"
+            reports_version = res.stdout.startswith("HowlFrame ")
+            version_info = "operational" if res.returncode == 0 and reports_version else "error"
         except Exception:
             version_info = "unreachable"
 

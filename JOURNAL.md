@@ -203,8 +203,8 @@ Reproduced README handoff --json rejection. Added failing command-level tests, t
 ## 2026-10-21 Mission 007 F4/F5/F13
 
 Baseline 4700f486cbf12577458bbbb7a1e572330a94f0bf: 58 tests passed.
-Seventeen new synthetic security/descriptor regressions all failed against archived
-baseline source; fixed source passes 75 tests, flake8 and SEO checks. Implemented
+Eighteen new synthetic security/descriptor regressions all failed against archived
+baseline source; fixed source passes 76 tests, flake8 and SEO checks. Implemented
 no-follow descriptor-relative bounded checkpoint reads, complete Forge schema
 validation, worker-assertion labeling, SHA-256 provenance, descriptor declaration.
 Used isolated worktree and mission-specific temporary environment; installed owner

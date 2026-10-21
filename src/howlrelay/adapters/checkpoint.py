@@ -12,6 +12,7 @@ from datetime import datetime
 import hashlib
 import json
 import os
+import re
 import stat
 import time
 from importlib.resources import files
@@ -56,8 +57,12 @@ def _validator():
     def timestamp(value):
         if not isinstance(value, str):
             return True  # The schema type validator rejects nonstrings.
-        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
-        return "T" in value and parsed.tzinfo is not None
+        if not re.fullmatch(
+                r"\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(?:\.\d+)?"
+                r"(?:[Zz]|[+-]\d{2}:\d{2})", value):
+            return False
+        parsed = datetime.fromisoformat(value.upper().replace("Z", "+00:00"))
+        return parsed.tzinfo is not None
 
     return Draft202012Validator(schemas[0], registry=registry, format_checker=checker)
 
@@ -196,6 +201,8 @@ class CheckpointCollector(BaseEvidenceCollector):
                         "relative_path": str(path.relative_to(repo_path)),
                         "source_sha256": data["_source_sha256"],
                         "authorization": "none; worker assertion only",
+                        "checkpoint": {k: v for k, v in data.items()
+                                       if k != "_source_sha256"},
                     },
                 )
             )

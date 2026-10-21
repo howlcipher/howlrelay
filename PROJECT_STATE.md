@@ -118,6 +118,6 @@ Additional regressions cover conflicting options on all three commands and prese
 
 F4/F5/F13: bounded descriptor-relative checkpoint ingestion, full vendored Forge
 schema validation, worker-assertion authority labeling and SHA-256 provenance,
-and checkpoint acceptance declared in interop. Actual verification: 75 tests pass,
+and checkpoint acceptance declared in interop. Actual verification: 76 tests pass,
 flake8 and SEO checks pass on Python 3.14. A release and independent review remain
 required before treating installed v0.1.0 as repaired.

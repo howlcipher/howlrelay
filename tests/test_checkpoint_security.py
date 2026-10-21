@@ -14,6 +14,7 @@ from tests.test_checkpoint_collector import FIXTURE, bundle
     ('safe_to_resume', 'false'), ('completed', 123), ('remaining', [1]),
     ('task_id', None), ('status', 'invented'), ('last_verified_commit', 'xyz'),
     ('worker', {'role': 2}), ('unknown', True),
+    ('created_at', '2026-W43-3T12:00:00Z'),
     ('verification', {'independent': 'true', 'checks': []}),
 ])
 def test_rejects_invalid_schema(tmp_path, field, value):

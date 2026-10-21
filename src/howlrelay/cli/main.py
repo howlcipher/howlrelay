@@ -18,6 +18,13 @@ from howlrelay.renderers.markdown import render_brief, render_handoff, render_st
 
 
 def parse_args(args: Optional[list] = None) -> argparse.Namespace:
+    parsed = _parser().parse_args(args)
+    if parsed.command not in (None, "interop") and parsed.format is None:
+        parsed.format = "markdown"
+    return parsed
+
+
+def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="howlrelay",
         description=(
@@ -32,6 +39,11 @@ def parse_args(args: Optional[list] = None) -> argparse.Namespace:
     )
 
     subparsers = parser.add_subparsers(dest="command", help="Subcommand to execute")
+
+    parser_interop = subparsers.add_parser(
+        "interop", help="Print the howl.interop/v1 descriptor other Howl components check."
+    )
+    parser_interop.add_argument("--json", action="store_true", help="JSON output (the default).")
 
     # Command: status
     parser_status = subparsers.add_parser(
@@ -142,10 +154,7 @@ def parse_args(args: Optional[list] = None) -> argparse.Namespace:
         help="Output file path (default: stdout).",
     )
 
-    parsed = parser.parse_args(args)
-    if parsed.command and parsed.format is None:
-        parsed.format = "markdown"
-    return parsed
+    return parser
 
 
 def write_output(content: str, output_path: Optional[Path]) -> None:
@@ -159,6 +168,13 @@ def write_output(content: str, output_path: Optional[Path]) -> None:
 
 def main(argv: Optional[list] = None) -> int:
     args = parse_args(argv)
+    if args.command == "interop":
+        import json
+
+        from howlrelay.interop_descriptor import describe
+
+        print(json.dumps(describe(_parser()), indent=2))
+        return 0
     if not args.command:
         # Default behavior: show help if no subcommand provided
         parse_args(["--help"])

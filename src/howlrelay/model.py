@@ -11,6 +11,8 @@ from pydantic import BaseModel, Field, field_validator
 
 from howlrelay.policy import check_prohibited_keys, SurveillanceSignalError
 
+from howlrelay import __version__
+
 
 class EvidenceType(str, Enum):
     GIT_COMMIT = "git_commit"
@@ -159,6 +161,6 @@ class HandoffEnvelope(BaseModel):
     known_failures: List[str] = Field(default_factory=list)
     continuation_instructions: List[str] = Field(default_factory=list)
     exact_starting_commands: List[str] = Field(default_factory=list)
-    generator_version: str = "0.1.0"
+    generator_version: str = Field(default_factory=lambda: __version__)
     observed_facts: List[str] = Field(default_factory=list)
     inferred_state: List[str] = Field(default_factory=list)

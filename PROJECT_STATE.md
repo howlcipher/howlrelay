@@ -113,3 +113,11 @@ Format options are mutually exclusive; existing --format syntax is preserved.
 Baseline: 33 tests. Eighteen added cases protect rendered shortcuts, conflicts, and the Markdown default.
 
 Additional regressions cover conflicting options on all three commands and preserve default Markdown output.
+
+## Mission 007 security remediation (2026-10-21)
+
+F4/F5/F13: bounded descriptor-relative checkpoint ingestion, full vendored Forge
+schema validation, worker-assertion authority labeling and SHA-256 provenance,
+and checkpoint acceptance declared in interop. Actual verification: 75 tests pass,
+flake8 and SEO checks pass on Python 3.14. A release and independent review remain
+required before treating installed v0.1.0 as repaired.

@@ -160,3 +160,26 @@ flake8 src tests
 ## License
 
 [MIT](LICENSE) Copyright (c) 2026 HowlCipher
+
+### Checkpoint ingestion security
+
+HowlForge checkpoints are untrusted worker reports, never authorization to execute
+or resume work. Relay recommends review before resuming and retains the source
+path and SHA-256 of the bytes it inspected. It validates the complete vendored
+`howlforge.checkpoint/v1` schema, including nested decisions and verification.
+Malformed documents are ignored; required JSON types are never coerced.
+
+Discovery is limited to depth 5, 4,096 entries, and 2 seconds. Collection examines
+at most 64 files, each at most 1 MiB, with a 2-second collection deadline and a
+2-second read deadline. Directory components and files are opened relative to
+pinned directory descriptors without following symlinks; special files are refused.
+The elapsed budgets are checked between filesystem operations: they cannot cancel
+an operating-system filesystem call stalled by a broken remote mount. Use local
+repositories for inspection. Platforms without descriptor-relative no-follow opens
+skip checkpoint ingestion rather than fall back to unsafe path reads.
+
+Schemas are copied unchanged from HowlForge commit
+`9dbee38a9e85733f7bfd39c8da7f1ab574993d04` (`schemas/{checkpoint,verification,decisions}.schema.json`).
+In particular, embedded verification requires its `schema_version`; earlier Relay
+fixtures omitted it and have been corrected. Invalid legacy documents must be
+regenerated or corrected by their producer.

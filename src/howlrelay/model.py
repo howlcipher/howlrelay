@@ -24,6 +24,7 @@ class EvidenceType(str, Enum):
     HOWLFRAME_POLICY = "howlframe_policy"
     DECISION_RECORD = "decision_record"
     HOWLDREAM_EXPLORATION = "howldream_exploration"
+    WORKER_CHECKPOINT = "worker_checkpoint"
     CUSTOM = "custom"
 
 

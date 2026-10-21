@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from howlrelay import __version__
+from howlrelay.adapters.checkpoint import CheckpointCollector
 from howlrelay.adapters.continuity import ContinuityCollector
 from howlrelay.adapters.git import GitCollector
 from howlrelay.adapters.howlframe import HowlFrameCollector
@@ -40,6 +41,7 @@ class HandoffEngine:
         test_collector: Optional[TestCollector] = None,
         howlframe_collector: Optional[HowlFrameCollector] = None,
         howldream_collector: Optional[HowlDreamCollector] = None,
+        checkpoint_collector: Optional[CheckpointCollector] = None,
         meeting_engine: Optional[MeetingReasoningEngine] = None,
     ):
         self.git_collector = git_collector or GitCollector()
@@ -47,6 +49,7 @@ class HandoffEngine:
         self.test_collector = test_collector or TestCollector()
         self.howlframe_collector = howlframe_collector or HowlFrameCollector()
         self.howldream_collector = howldream_collector or HowlDreamCollector()
+        self.checkpoint_collector = checkpoint_collector or CheckpointCollector()
         self.meeting_engine = meeting_engine or MeetingReasoningEngine()
 
     def inspect_repo(self, repo_path: Path, run_tests: bool = False) -> HandoffEnvelope:
@@ -61,6 +64,7 @@ class HandoffEngine:
         evidence.extend(self.test_collector.collect(repo_path))
         evidence.extend(self.howlframe_collector.collect(repo_path))
         evidence.extend(self.howldream_collector.collect(repo_path))
+        evidence.extend(self.checkpoint_collector.collect(repo_path))
 
         # 2. Extract structured context from continuity documents
         context = self.continuity_collector.extract_structured_context(repo_path)
@@ -98,6 +102,22 @@ class HandoffEngine:
                     files_involved.extend(ev.metadata["head_modified_files"])
 
         files_involved = list(dict.fromkeys(files_involved))
+
+        # A HowlForge worker checkpoint says what the last worker left; use it when
+        # the continuity documents do not.
+        for ev in evidence:
+            if ev.type != EvidenceType.WORKER_CHECKPOINT:
+                continue
+            if not files_involved:
+                files_involved.extend(ev.metadata.get("changed_files", []))
+            resumable = ev.metadata.get("remaining") and ev.metadata.get("safe_to_resume")
+            if not next_actions and resumable:
+                next_actions.append(
+                    NextAction(
+                        action=f"Resume {ev.metadata['task_id']}: {ev.metadata['remaining'][0]}",
+                        priority="NEXT",
+                    )
+                )
 
         # If no next actions were explicitly given, but active work exists, populate next action
         if not next_actions and active_work:

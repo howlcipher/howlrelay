@@ -86,6 +86,7 @@ HowlRelay is built to integrate with the broader **Howl** ecosystem:
 * **[HowlChangeOps](https://github.com/howlcipher/howlchangeops):** Policy-driven release authority and verification boundary.
 * **[HowlWriter](https://github.com/howlcipher/howlwriter):** Citation, provenance, and verification system.
 * **[HowlDream](https://github.com/howlcipher/howldream):** HowlRelay reads its `exploration_envelope.json` files (`howl.exploration_result/v1`; any other `schema_version` is skipped and reported) as advisory evidence.
+* **[HowlForge](https://github.com/howlcipher/howlforge):** a worker's handoff bundle (`checkpoint.json`, `howlforge.checkpoint/v1`, found up to five levels deep) is read as continuity evidence: what the last worker completed, what remains, the last verified commit, and whether it is safe to resume. When the continuity documents name no next action, the checkpoint's first remaining item does.
 * **[HowlProof](https://github.com/howlcipher/howlproof):** `howlproof handoff --for relay` writes `howlproof-handoff.md`, which HowlRelay reads as the handoff when the repository has no `HANDOFF.md`.
 
 `howlrelay interop --json` prints the `howl.interop/v1` descriptor from the [Howl interop contract](https://github.com/howlcipher/howl/blob/main/docs/INTEROP.md); exit codes are 0 ok, 1 error, 2 usage error.

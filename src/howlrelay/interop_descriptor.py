@@ -11,6 +11,7 @@ import argparse
 from typing import Any, Dict, List
 
 from howlrelay import __version__
+from howlrelay.adapters.checkpoint import CHECKPOINT_SCHEMA
 from howlrelay.adapters.howldream import SUPPORTED_ENVELOPE_SCHEMAS
 
 SCHEMA = "howl.interop/v1"
@@ -34,7 +35,7 @@ def describe(parser: argparse.ArgumentParser) -> Dict[str, Any]:
                 flags = _flags(sub)
                 entry: Dict[str, Any] = {"path": [name], "flags": flags, "json": "--json" in flags}
                 if name in ("status", "handoff", "brief"):
-                    entry["accepts"] = list(SUPPORTED_ENVELOPE_SCHEMAS)
+                    entry["accepts"] = list(SUPPORTED_ENVELOPE_SCHEMAS) + [CHECKPOINT_SCHEMA]
                 if name == "interop":
                     entry["emits"] = [SCHEMA]
                 commands.append(entry)

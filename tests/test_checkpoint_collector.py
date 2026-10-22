@@ -43,5 +43,6 @@ def test_engine_uses_the_checkpoint_when_continuity_docs_are_silent(tmp_path):
     bundle(tmp_path)
     envelope = HandoffEngine().inspect_repo(tmp_path)
     actions = [a.action for a in envelope.work_state.next_actions]
-    assert "Resume HOWL-0042: integration tests" in actions
+    assert any("Review checkpoint HOWL-0042 before resuming" in a for a in actions)
+    assert any("not authorization" in a for a in actions)
     assert "internal/runtimes/runtime.go" in envelope.files_involved

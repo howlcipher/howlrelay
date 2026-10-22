@@ -199,3 +199,15 @@ Implement Milestone 2 enhancements inspired by HowlCreate creative exploration r
 ## 2026-10-12 HOWL-E2E-UX-001 UX-002
 
 Reproduced README handoff --json rejection. Added failing command-level tests, then added mutually exclusive JSON/YAML shortcuts to status, handoff and brief. Existing renderers and authority behavior remain unchanged. Baseline suite: 33 passed. Initial nine regressions failed before repair; the final expanded matrix produced 15 failed, 3 passed, 7 deselected against baseline. Final verification is recorded in HANDOFF.md.
+
+## 2026-10-21 Mission 007 F4/F5/F13
+
+Baseline 4700f486cbf12577458bbbb7a1e572330a94f0bf: 58 tests passed.
+Eighteen new synthetic security/descriptor regressions all failed against archived
+baseline source; fixed source passes 76 tests, flake8 and SEO checks. Implemented
+no-follow descriptor-relative bounded checkpoint reads, complete Forge schema
+validation, worker-assertion labeling, SHA-256 provenance, descriptor declaration.
+Used isolated worktree and mission-specific temporary environment; installed owner
+tools were not modified. Published schema requires nested verification schema_version;
+fixed invalid fixture rather than weakening validation. See README for filesystem
+blocking and platform limitations. Independent review and release remain pending.

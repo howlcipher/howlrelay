@@ -114,7 +114,9 @@ class HandoffEngine:
             if not next_actions and resumable:
                 next_actions.append(
                     NextAction(
-                        action=f"Resume {ev.metadata['task_id']}: {ev.metadata['remaining'][0]}",
+                        action=(f"Review checkpoint {ev.metadata['task_id']} before resuming: "
+                                f"{ev.metadata['remaining'][0]} "
+                                "(worker assertion; not authorization)"),
                         priority="NEXT",
                     )
                 )

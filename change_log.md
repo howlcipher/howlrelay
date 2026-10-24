@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.1
 
 - Read HowlForge worker checkpoints (`howlforge.checkpoint/v1`, the ecosystem's machine handoff between AI workers) as `worker_checkpoint` evidence. Their remaining work becomes the next action and their changed files the files involved when the continuity documents say nothing. Other `checkpoint.json` files are ignored.
 
